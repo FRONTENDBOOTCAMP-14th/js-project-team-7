@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
-import path from "path";
-import fs from "fs";
+import { defineConfig } from 'vite';
+import path from 'path';
+import fs from 'fs';
 
 // findAllHtmlFiles 함수 정의 추가
 function findAllHtmlFiles(directory) {
@@ -15,15 +15,13 @@ function findAllHtmlFiles(directory) {
 
       if (stat.isDirectory()) {
         scanDirectory(filePath);
-      } else if (file.endsWith(".html")) {
-        // 키 이름을 경로에서 추출 (확장자 제외)
-        const key = path.relative(__dirname, filePath).replace(".html", "");
+      } else if (file.endsWith('.html')) {
+        const key = path.relative(__dirname, filePath).replace('.html', '');
         htmlFiles[key] = filePath;
       }
     }
   }
 
-  scanDirectory(directory);
   return htmlFiles;
 }
 
@@ -31,12 +29,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        index: path.resolve(__dirname, "index.html"),
-        ...findAllHtmlFiles(path.resolve(__dirname, "src")),
+        index: path.resolve(__dirname, 'index.html'),
+        ...findAllHtmlFiles(path.resolve(__dirname, 'src')),
       },
     },
   },
-  appType: "mpa", // fallback 사용안함
+  appType: 'mpa', // fallback 사용안함
   server: {
     // open: 'src/pages/main/index.html', // 서버 시작 시 브라우저에서 지정페이지 자동으로 열기
   },
