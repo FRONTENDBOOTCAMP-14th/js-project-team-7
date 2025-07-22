@@ -1,4 +1,3 @@
-@import url('/src/style.css');
 /* 여행지 추천 제목 */
 .section_title {
   font-size: var(--font_2xl);
