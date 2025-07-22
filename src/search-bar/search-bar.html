@@ -3,12 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./search-bar.css" />
+    <script src="./search-bar.js"></script>
     <title>Search Bar</title>
   </head>
   <body>
-    <div class="search-bar">
-      <input type="text" placeholder="떠나고 싶은 곳은?" />
-      <button><img src="../assets/search.svg" alt="search" /></button>
+    <div class="search_container">
+      <div class="search_bar">
+        <input type="text" class="search_input" id="search_input" placeholder="떠나고 싶은 곳은?" />
+        <button class="search_button"><img src="../assets/search.svg" alt="search" /></button>
+      </div>
+      <ul class="suggestions" id="suggestions"></ul>
     </div>
   </body>
 </html>
