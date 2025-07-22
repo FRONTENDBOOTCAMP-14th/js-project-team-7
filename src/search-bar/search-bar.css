@@ -35,7 +35,7 @@
   aspect-ratio: 1/1;
   border: 0;
   border-radius: 100%;
-  background-color: var(--color_blue);
+  background-color: var(--color_black);
 }
 
 .suggestions {
