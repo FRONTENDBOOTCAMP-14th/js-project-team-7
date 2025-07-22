@@ -1,0 +1,29 @@
+.tabs {
+  display: flex;
+  flex-flow: row nowrap;
+  border-bottom: 1px solid black;
+
+  .tab {
+    position: relative;
+    font-size: var(--font_base);
+    font-weight: 600;
+    line-height: 16px;
+    padding: 5px 15px;
+
+    &.is_selected {
+      color: var(--color_blue);
+      border-bottom: 1px solid var(--color_blue);
+      margin-bottom: -1px;
+    }
+  }
+}
+
+.contents {
+  .tab_content {
+    display: none;
+
+    &.is_selected {
+      display: block;
+    }
+  }
+}
