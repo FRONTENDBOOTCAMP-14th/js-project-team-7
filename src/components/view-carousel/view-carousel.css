@@ -1,0 +1,144 @@
+:root {
+  /* color */
+  --color_black: #2e2e2e;
+  --color_gray: #999;
+  --color_light_gray: #999;
+  --color_blue: #4e78ff;
+  --color_light_blue: #8aa6ff;
+
+  /* font-size */
+  /* 수치 저장 */
+  --font_size_12: 12px;
+  --font_size_14: 14px;
+  --font_size_16: 16px;
+  --font_size_19: 19px;
+
+  /* 실제 사용 */
+  --font_base: var(--font_size_12);
+  --font_lg: var(--font_size_14);
+  --font_xl: var(--font_size_16);
+  --font_2xl: var(--font_size_19);
+
+  /* border-radius */
+  --rounded_none: 0;
+  --rounded_sm: 8px;
+  --rounded_md: 16px;
+  --rounded_lg: 24px;
+  --rounded_full: 9999px;
+  --rounded_circle: 50%;
+
+  /* box-shadow */
+  --shadow-base: 0px 4px 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.view_info_container {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 10px;
+
+  .view_info_title {
+    display: flex;
+    flex-flow: row wrap;
+
+    .title {
+      font-weight: 300;
+      display: flex;
+      flex-flow: column wrap;
+      gap: 1px;
+
+      span {
+        font-size: var(--font_base);
+        color: var(--color_gray);
+      }
+      strong {
+        font-size: var(--font_2xl);
+      }
+    }
+
+    .weather {
+      margin-inline-start: auto;
+      padding-inline-end: 10px;
+    }
+  }
+
+  .view_info_contents {
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: hidden;
+    inline-size: 100%;
+    aspect-ratio: 16/10;
+    border-radius: var(--rounded_md);
+
+    .change_btn {
+      position: absolute;
+      inline-size: 32px;
+      aspect-ratio: 1;
+      inset: auto 10px 10px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--rounded_circle);
+      background-color: var(--color_blue);
+    }
+  }
+}
+
+.view_carousel {
+  --view_carousel_ui_color: #fff;
+
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 16/10;
+  background-color: var(--color_black);
+
+  .view_carousel_list {
+    display: flex;
+    flex-flow: row nowrap;
+    block-size: 100%;
+    transition: translate 0.4s;
+
+    .view_carousel_item {
+      flex-shrink: 0;
+      inline-size: 100%;
+      block-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  }
+
+  .view_carousel_nav {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 5px;
+    position: absolute;
+    inset: 10px auto auto 10px;
+
+    .view_carousel_status,
+    .view_carousel_btn {
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: var(--rounded_full);
+    }
+
+    .view_carousel_status {
+      inline-size: 52px;
+      block-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--view_carousel_ui_color);
+    }
+
+    .view_carousel_btn {
+      inline-size: 20px;
+      aspect-ratio: 1;
+    }
+  }
+}
+
+.view_map {
+  inline-size: 100%;
+  aspect-ratio: 16/10;
+  background-color: var(--color_gray);
+  transition: translate 0.4s;
+}
