@@ -27,13 +27,15 @@
 }
 
 .search_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   width: 36px;
   aspect-ratio: 1/1;
   border: 0;
   border-radius: 100%;
-  /* background-color: var(--color_blue); */
-  background-color: #4e78ff;
+  background-color: var(--color_blue);
 }
 
 .suggestions {
