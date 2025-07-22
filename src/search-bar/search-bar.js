@@ -5,34 +5,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const suggestionsBox = document.getElementById('suggestions');
   const searchButton = document.getElementById('search_button');
 
+  const showSuggestions = () => {
+    suggestionsBox.style.display = 'block';
+  };
+
+  const hideSuggestions = () => {
+    suggestionsBox.style.display = 'none';
+  };
+
+  const changeButtonColor = (color) => {
+    searchButton.style.background = color;
+  };
+
   searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
     suggestionsBox.innerHTML = '';
 
     if (query.length > 0) {
-      searchButton.style.background = 'var(--color_blue)';
+      changeButtonColor('var(--color_blue)');
     } else {
-      searchButton.style.background = 'var(--color_black)';
+      changeButtonColor('var(--color_black)');
     }
 
+    const filtered = keywords.filter((word) => word.includes(query));
+
     if (query) {
-      const filtered = keywords.filter((word) => word.includes(query));
       if (filtered.length > 0) {
         filtered.forEach((word) => {
           const li = document.createElement('li');
           li.textContent = word;
           li.addEventListener('click', () => {
             searchInput.value = word;
-            suggestionsBox.style.display = 'none';
+            hideSuggestions();
           });
           suggestionsBox.appendChild(li);
         });
-        suggestionsBox.style.display = 'block';
+        showSuggestions();
       } else {
-        suggestionsBox.style.display = 'none';
+        hideSuggestions();
       }
     } else {
-      suggestionsBox.style.display = 'none';
+      hideSuggestions();
     }
   });
 });
