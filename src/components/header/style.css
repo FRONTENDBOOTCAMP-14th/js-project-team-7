@@ -1,0 +1,63 @@
+@import url('/src/style.css');
+
+.header_logo_container {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  background: linear-gradient(135deg, var(--color_blue), var(--color_light_blue));
+  border-radius: var(--rounded_lg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  /* 추가 동심원들 */
+  .circle {
+    position: absolute;
+    border-radius: var(--rounded_circle);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .circle_1 {
+    width: 212px;
+    height: 212px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .circle_2 {
+    width: 184px;
+    height: 184px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .circle_3 {
+    width: 146px;
+    height: 146px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .circle_4 {
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Go7 텍스트 */
+  .header_logo_text {
+    position: relative;
+    z-index: 10;
+    font-family: 'Inter', 'Ria', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+  }
+}
