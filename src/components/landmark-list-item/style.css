@@ -1,8 +1,11 @@
 :root {
-  --photo_size: 88px;
+  --photo_sm_size: 50px;
+  --photo_md_size: 88px;
+  --photo_lg_size: 100px;
 }
 
 .photo_container {
+  --photo_size: var(--photo_md_size);
   width: var(--photo_size);
   height: var(--photo_size);
   overflow: hidden;
@@ -17,6 +20,7 @@
 }
 
 .landmark_list_item_wrapper {
+  --photo_size: var(--photo_md_size);
   display: grid;
   grid-template-columns: var(--photo_size) auto;
 
