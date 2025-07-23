@@ -1,6 +1,8 @@
 @import url(/src/components/header/style.css);
+@import url(/src/components/footer/style.css);
 @import url(/src/components/search-bar/search-bar.css);
 @import url(/src/components/search-list/search-list.css);
+@import url(/src/components/view-more-button/style.css);
 
 .search_result_container {
   display: flex;
