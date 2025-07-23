@@ -27,7 +27,7 @@
   width: 312px;
   color: var(--color_black);
   border-radius: var(--rounded_md);
-  box-shadow: var(--shadow-base);
+  box-shadow: var(--shadow_base);
 
   .landmark_list_item_contents {
     padding-inline: 13px;

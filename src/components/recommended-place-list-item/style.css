@@ -16,7 +16,7 @@
 
   color: var(--color_black);
   border-radius: var(--rounded_md);
-  box-shadow: var(--shadow-base);
+  box-shadow: var(--shadow_base);
   background: white;
 
   transition: all 0.3s ease;

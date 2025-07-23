@@ -3,7 +3,7 @@
   display: flex;
   flex-flow: row wrap;
   border-radius: var(--rounded_full);
-  box-shadow: var(--shadow-base);
+  box-shadow: var(--shadow_base);
 
   li {
     position: relative;
