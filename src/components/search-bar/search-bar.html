@@ -6,15 +6,15 @@
     <meta name="Description" content="Go7! 여행 추천지 검색 웹사이트 입니다." />
     <title>Go7</title>
     <link rel="icon" href="/images/favicon.ico" />
-    <link rel="stylesheet" href="./search-bar.css" />
+    <link rel="stylesheet" href="/src/components/search-bar/search-bar.css" />
     <script type="module" src="/src/main.js"></script>
-    <script src="./search-bar.js"></script>
+    <script src="/src/components/search-bar/search-bar.js"></script>
   </head>
   <body>
     <div class="search_container">
       <div class="search_bar">
         <input type="text" class="search_input" id="search_input" placeholder="떠나고 싶은 곳은?" autocomplete="off" />
-        <button class="search_button" id="search_button"><img src="../assets/search.svg" alt="search" /></button>
+        <button class="search_button" id="search_button"><img src="/src/assets/search.svg" alt="search" /></button>
       </div>
       <ul class="suggestions" id="suggestions"></ul>
     </div>
