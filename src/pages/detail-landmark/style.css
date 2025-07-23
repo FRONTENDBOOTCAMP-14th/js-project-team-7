@@ -1,0 +1,42 @@
+@import url('/src/components/header/style.css');
+@import url('/src/components/footer/style.css');
+@import url('/src/components/view-nav-button/view-nav-button.css');
+@import url('/src/components/view-carousel/view-carousel.css');
+@import url('/src/components/tab/style.css');
+@import url('/src/components/recommended-place-list-item/style.css');
+@import url('/src/components/landmark-list-item/style.css');
+@import url('/src/components/view-more-button/style.css');
+
+.page_container {
+  max-width: 380px;
+  padding: 0 24px;
+  margin: 0 auto;
+
+  .view_info_description {
+    margin-bottom: 30px;
+  }
+}
+
+.header_logo_container {
+  height: 200px;
+}
+
+.tabs {
+  margin-block-end: 20px;
+}
+
+.landmark_list_item_container {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 20px;
+}
+
+.view_more_button_container {
+  margin: 30px 0 70px 0;
+}
+
+.view_nav_btn {
+  position: relative;
+  width: fit-content;
+  margin: -20px auto 40px;
+}
