@@ -1,5 +1,10 @@
 /* 여행지 추천 제목 */
+
 .section_title {
+  width: 100%;
+  max-width: 347.5px; /* destinations와 동일한 max-width */
+  text-align: left;
+  box-sizing: border-box;
   font-size: var(--font_2xl);
   margin-bottom: 20px;
   font-weight: 300;
@@ -7,9 +12,10 @@
 }
 /* 여행지 추천 섹션 */
 .destinations {
-  max-width: 455px;
-  margin-block-end: 50px;
+  max-width: 347.5px;
+  height: 268px;
   position: relative; /* 버튼 위치 조정을 위한 relative 추가 */
+  overflow: hidden; /* 캐러셀 영역 밖의 내용 숨김 */
 
   .carousel_container {
     width: 100%;
@@ -21,6 +27,7 @@
       .destination_card {
         width: 220px;
         height: 218px;
+        flex-shrink: 0;
         background: white;
         border-radius: var(--rounded_md);
         box-shadow: var(--shadow_base);
@@ -65,7 +72,7 @@
   .carousel_button {
     position: absolute;
     top: 30%;
-    right: 35%;
+    right: 10%;
     transform: translateY(-50%);
     width: 32px;
     height: 32px;
