@@ -6,9 +6,72 @@
     <meta name="Description" content="Go7! 여행 추천지 검색 웹사이트 입니다." />
     <title>Go7</title>
     <link rel="icon" href="/images/favicon.ico" />
+    <link rel="stylesheet" href="/src//pages/search-result/index.css" />
+    <script src="/src/components/search-bar/search-bar.js"></script>
     <script type="module" src="/src/main.js"></script>
   </head>
   <body>
-    search-result
+    <div class="search_result_container">
+      <div class="header_logo_container">
+        <!-- 동심원들 -->
+        <div class="circle circle_1"></div>
+        <div class="circle circle_2"></div>
+        <div class="circle circle_3"></div>
+        <div class="circle circle_4"></div>
+        <!-- 로고 텍스트 -->
+        <div class="header_logo_text">Go7</div>
+      </div>
+      <div class="search_container">
+        <div class="search_bar">
+          <input type="text" class="search_input" id="search_input" placeholder="떠나고 싶은 곳은?" autocomplete="off" />
+          <button class="search_button" id="search_button"><img src="/src/assets/search.svg" alt="search" /></button>
+        </div>
+        <ul class="suggestions" id="suggestions"></ul>
+      </div>
+      <div class="search_list_container">
+        <div class="search_list_title">총 n개의 도시 검색 결과</div>
+        <div class="search_list">
+          <div class="destination_card">
+            <div class="card_image">
+              <img src="/src/assets/travel-card-image.svg" alt="알래스카" />
+            </div>
+            <div class="card_content">
+              <h3 class="card_title">알래스카</h3>
+              <p class="card_subtitle">19개의 랜드마크</p>
+            </div>
+          </div>
+
+          <div class="destination_card">
+            <div class="card_image">
+              <img src="/src/assets/travel-card-image.svg" alt="알래스카" />
+            </div>
+            <div class="card_content">
+              <h3 class="card_title">알래스카</h3>
+              <p class="card_subtitle">19개의 랜드마크</p>
+            </div>
+          </div>
+
+          <div class="destination_card">
+            <div class="card_image">
+              <img src="/src/assets/travel-card-image.svg" alt="알래스카" />
+            </div>
+            <div class="card_content">
+              <h3 class="card_title">알래스카</h3>
+              <p class="card_subtitle">19개의 랜드마크</p>
+            </div>
+          </div>
+
+          <div class="destination_card">
+            <div class="card_image">
+              <img src="/src/assets/travel-card-image.svg" alt="알래스카" />
+            </div>
+            <div class="card_content">
+              <h3 class="card_title">알래스카</h3>
+              <p class="card_subtitle">19개의 랜드마크</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

@@ -4,6 +4,10 @@
   flex-direction: column;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: var(--rounded_lg);
+  position: absolute;
+  top: 336px;
+  z-index: 10;
+  background-color: #fff;
 }
 
 .search_bar {
@@ -37,12 +41,15 @@
 }
 
 .suggestions {
+  position: static;
+  width: 100%;
   display: none;
   margin: 0;
   padding: 0;
   padding-left: 20px;
   font-size: var(--font_lg);
 }
+
 .suggestions li {
   list-style: none;
   cursor: pointer;
