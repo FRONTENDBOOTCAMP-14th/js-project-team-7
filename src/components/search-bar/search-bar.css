@@ -1,6 +1,6 @@
 .search_container {
-  max-width: 312px;
   width: 100%;
+  max-width: 312px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -21,9 +21,9 @@
 }
 
 .search_input {
-  flex: 1;
-  min-width: 0;
   padding-left: 14px;
+  min-width: 0;
+  flex: 1;
   border: 0;
   background: none;
   outline: none;
@@ -52,7 +52,6 @@
   padding-left: 20px;
   font-size: var(--font_lg);
 }
-
 .suggestions li {
   list-style: none;
   cursor: pointer;
