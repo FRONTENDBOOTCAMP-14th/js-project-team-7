@@ -1,8 +1,8 @@
 :root {
   /* color */
   --color_black: #2e2e2e;
-  --color_gray: #999;
-  --color_light_gray: #999;
+  --color_gray: #757575;
+  --color_light_gray: #f9f9f9;
   --color_blue: #4e78ff;
   --color_light_blue: #8aa6ff;
 
@@ -28,5 +28,5 @@
   --rounded_circle: 50%;
 
   /* box-shadow */
-  --shadow-base: 0px 4px 6px 0 rgba(0, 0, 0, 0.1);
+  --shadow_base: 0px 4px 6px 0 rgba(0, 0, 0, 0.1);
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="Description" content="Go7! 여행 추천지 검색 웹사이트 입니다." />
+    <title>Go7</title>
+    <link rel="icon" href="/public/images/favicon.ico" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/components/tab/style.css" />
+  </head>
+  <body>
+    <div class="tabs_container">
+      <div class="tabs" role="tablist">
+        <button type="button" id="tab1" class="tab is_selected" role="tab" aria-selected="true" aria-controls="content1">tab 1</button>
+        <button type="button" id="tab2" class="tab" role="tab" aria-selected="false" aria-controls="content2">tab 2</button>
+        <button type="button" id="tab3" class="tab" role="tab" aria-selected="false" aria-controls="content3">tab 3</button>
+      </div>
+      <div class="contents">
+        <section id="content1" class="tab_content is_selected" role="tabpanel" aria-labelledby="tab1">content 1</section>
+        <section id="content2" class="tab_content" role="tabpanel" aria-labelledby="tab2">content 2</section>
+        <section id="content3" class="tab_content" role="tabpanel" aria-labelledby="tab3">content 3</section>
+      </div>
+    </div>
+  </body>
+</html>

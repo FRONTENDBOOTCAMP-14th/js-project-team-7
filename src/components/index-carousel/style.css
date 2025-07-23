@@ -1,0 +1,87 @@
+/* 여행지 추천 제목 */
+.section_title {
+  font-size: var(--font_2xl);
+  margin-bottom: 20px;
+  font-weight: 300;
+  letter-spacing: -0.38px;
+}
+/* 여행지 추천 섹션 */
+.destinations {
+  max-width: 455px;
+  margin-block-end: 50px;
+  position: relative; /* 버튼 위치 조정을 위한 relative 추가 */
+
+  .carousel_container {
+    width: 100%;
+
+    .carousel_track {
+      display: flex;
+      gap: 15px;
+      /* 각 여행지 카드 */
+      .destination_card {
+        width: 220px;
+        height: 218px;
+        background: white;
+        border-radius: var(--rounded_md);
+        box-shadow: var(--shadow_base);
+        /* 여행지 이미지 */
+        .card_image {
+          width: 100%;
+          aspect-ratio: 16 / 10; /* 16:10 비율 설정 */
+          position: relative;
+        }
+        /* 여행지 카드 이미지 사이즈 */
+        .card_image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: var(--rounded_md);
+          transition: transform 0.3s ease;
+        }
+
+        /* 카드 내용 */
+        .card_content {
+          padding-block-start: 11.7px;
+          padding-inline-start: 15px;
+
+          .card_title {
+            font-size: var(--font_xl);
+            font-weight: 300;
+            color: var(--color_black);
+            margin-bottom: 4px;
+          }
+
+          .card_subtitle {
+            font-size: var(--font_base);
+            font-weight: 300;
+            color: var(--color_gray);
+          }
+        }
+      }
+    }
+  }
+
+  /* 캐러셀 버튼 */
+  .carousel_button {
+    position: absolute;
+    top: 30%;
+    right: 35%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    z-index: 5;
+
+    /* 캐러셀 벡터 이미지사이즈 */
+    img {
+      max-width: 8px;
+      max-height: 12px;
+    }
+  }
+}

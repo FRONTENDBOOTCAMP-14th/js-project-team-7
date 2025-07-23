@@ -1,0 +1,65 @@
+.header_logo_container {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  background: linear-gradient(135deg, var(--color_blue), var(--color_light_blue));
+  border-radius: 0 0 var(--rounded_lg) var(--rounded_lg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  /* 동심원 스케일 변수 */
+  --circle-scale: 1;
+  --text-scale: 1;
+
+  /* 추가 동심원들 */
+  .circle {
+    position: absolute;
+    border-radius: var(--rounded_circle);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .circle_1 {
+    width: calc(212px * var(--circle-scale));
+    height: calc(212px * var(--circle-scale));
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .circle_2 {
+    width: calc(184px * var(--circle-scale));
+    height: calc(184px * var(--circle-scale));
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .circle_3 {
+    width: calc(146px * var(--circle-scale));
+    height: calc(146px * var(--circle-scale));
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .circle_4 {
+    width: calc(100px * var(--circle-scale));
+    height: calc(100px * var(--circle-scale));
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Go7 텍스트 */
+  .header_logo_text {
+    position: relative;
+    z-index: 10;
+    font-family: 'Inter', 'Ria', sans-serif;
+    font-size: calc(36px * var(--text-scale));
+    font-weight: bold;
+    color: white;
+  }
+}
