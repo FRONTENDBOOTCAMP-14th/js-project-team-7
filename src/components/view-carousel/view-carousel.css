@@ -104,6 +104,7 @@
 }
 
 .view_map {
+  position: relative;
   inline-size: 100%;
   aspect-ratio: 16/10;
   background-color: var(--color_gray);
