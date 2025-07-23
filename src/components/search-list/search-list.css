@@ -1,0 +1,54 @@
+.search_list_container {
+  width: 100%;
+  max-width: 480px;
+}
+
+.search_list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px 12px;
+  width: 100%;
+}
+
+.search_list_title {
+  margin: 20px 0;
+  font-size: var(--font_2xl);
+}
+
+.destination_card {
+  width: 100%;
+  background: white;
+  border-radius: var(--rounded_md);
+  box-shadow: var(--shadow-base);
+}
+
+.card_image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  position: relative;
+}
+
+.card_image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--rounded_md);
+  transition: transform 0.3s ease;
+}
+
+.card_content {
+  padding: 12px 15px;
+
+  .card_title {
+    font-size: var(--font_xl);
+    font-weight: 300;
+    color: var(--color_black);
+    margin-bottom: 4px;
+  }
+
+  .card_subtitle {
+    font-size: var(--font_base);
+    font-weight: 300;
+    color: var(--color_gray);
+  }
+}

@@ -4,24 +4,24 @@ import fs from 'fs';
 
 // findAllHtmlFiles 함수 정의 추가
 function findAllHtmlFiles(directory) {
-  const htmlFiles = {};
+  return scanDirectory(directory);
+}
 
-  function scanDirectory(dir) {
-    const files = fs.readdirSync(dir);
+function scanDirectory(dir) {
+  const files = fs.readdirSync(dir);
+  let htmlFiles = {};
 
-    for (const file of files) {
-      const filePath = path.join(dir, file);
-      const stat = fs.statSync(filePath);
+  for (const file of files) {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
 
-      if (stat.isDirectory()) {
-        scanDirectory(filePath);
-      } else if (file.endsWith('.html')) {
-        const key = path.relative(__dirname, filePath).replace('.html', '');
-        htmlFiles[key] = filePath;
-      }
+    if (stat.isDirectory()) {
+      htmlFiles = { ...htmlFiles, ...scanDirectory(filePath) };
+    } else if (file.endsWith('.html')) {
+      const key = path.relative(__dirname, filePath).replace('.html', '');
+      htmlFiles[key] = filePath;
     }
   }
-
   return htmlFiles;
 }
 
