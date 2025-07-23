@@ -1,6 +1,13 @@
+:root {
+  --photo_sm_size: 50px;
+  --photo_md_size: 88px;
+  --photo_lg_size: 100px;
+}
+
 .photo_container {
-  width: 100px;
-  height: 100px;
+  --photo_size: var(--photo_lg_size);
+  width: var(--photo_size);
+  height: var(--photo_size);
   overflow: hidden;
   border-radius: var(--rounded_md);
 }
