@@ -17,26 +17,14 @@ header {
   display: flex;
   justify-content: center;
 }
-
-/* 서브타이틀 텍스트 */
-.subtitle_text {
-  color: white;
-  font-size: var(--font_base);
-  font-weight: 300;
-  line-height: 16.8px;
-  text-align: center;
-  margin-top: -39px;
-  z-index: 10;
-  position: relative;
-}
-
 /* 검색 컨테이너 위치 조정 */
-.search_container {
-  margin-top: 9px;
-  margin-bottom: 50px; /* 아래 콘텐츠와 간격 */
-  z-index: 10; /* 헤더 위에 표시 */
-  position: relative;
-  background: white; /* 배경색 추가 */
+.search_result_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 70px;
+  padding: 0 24px;
 }
 
 /* 캐러셀 섹션들 중앙 정렬 */
