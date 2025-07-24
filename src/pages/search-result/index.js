@@ -25,38 +25,39 @@ const searchList = document.getElementById('search_list');
 const viewMoreButton = document.getElementById('view_more_button');
 const searchListTitle = document.getElementById('search_list_title');
 
-let currentIndex = 0;
-const ITEMS_PER_LOAD = 8;
+if (!searchList || !viewMoreButton || !searchListTitle) {
+  console.error('필수 DOM 요소가 없습니다.');
+} else {
+  searchListTitle.textContent = `총 ${escapeHTML(destinations.length)}개의 도시 검색 결과`;
 
-searchListTitle.textContent = `총 ${destinations.length}개의 도시 검색 결과`;
+  function renderCards() {
+    const nextIndex = currentIndex + ITEMS_PER_LOAD;
+    const slice = destinations.slice(currentIndex, nextIndex);
 
-function renderCards() {
-  const nextIndex = currentIndex + ITEMS_PER_LOAD;
-  const slice = destinations.slice(currentIndex, nextIndex);
+    slice.forEach((dest) => {
+      const card = document.createElement('a');
+      card.className = 'destination_card';
+      card.href = `/detail/${encodeURIComponent(dest.name)}`;
+      card.innerHTML = `
+        <div class="card_image">
+          <img src="${escapeHTML(dest.image)}" alt="${escapeHTML(dest.name)}" />
+        </div>
+        <div class="card_content">
+          <h3 class="card_title">${escapeHTML(dest.name)}</h3>
+          <p class="card_subtitle">${escapeHTML(dest.landmarks)}개의 랜드마크</p>
+        </div>
+      `;
+      searchList.appendChild(card);
+    });
 
-  slice.forEach((dest) => {
-    const card = document.createElement('a');
-    card.className = 'destination_card';
-    card.href = `/detail/${encodeURIComponent(dest.name)}`;
-    card.innerHTML = `
-      <div class="card_image">
-        <img src="${dest.image}" alt="${dest.name}" />
-      </div>
-      <div class="card_content">
-        <h3 class="card_title">${dest.name}</h3>
-        <p class="card_subtitle">${dest.landmarks}개의 랜드마크</p>
-      </div>
-    `;
-    searchList.appendChild(card);
-  });
+    currentIndex = nextIndex;
 
-  currentIndex = nextIndex;
-
-  if (currentIndex >= destinations.length) {
-    viewMoreButton.style.display = 'none';
+    if (currentIndex >= destinations.length) {
+      viewMoreButton.style.display = 'none';
+    }
   }
+
+  renderCards();
+
+  viewMoreButton.addEventListener('click', renderCards);
 }
-
-renderCards();
-
-viewMoreButton.addEventListener('click', renderCards);
