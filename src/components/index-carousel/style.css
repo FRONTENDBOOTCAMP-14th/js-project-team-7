@@ -1,14 +1,51 @@
-/* 여행지 추천 제목 */
+/* 여행지 추천 제목과 네비게이션 */
+.section_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 347.5px;
+}
 
 .section_title {
-  width: 100%;
-  max-width: 347.5px; /* destinations와 동일한 max-width */
-  text-align: left;
-  box-sizing: border-box;
   font-size: var(--font_2xl);
-  margin-bottom: 20px;
+  margin-bottom: 0;
   font-weight: 300;
   letter-spacing: -0.38px;
+}
+
+.section_controls {
+  display: flex;
+  gap: 8px;
+}
+
+.carousel_nav_button {
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  img {
+    max-width: 5px;
+    max-height: 7px;
+  }
+}
+
+/* 이전 버튼은 화살표를 180도 회전 */
+.prev_button img {
+  transform: rotate(180deg);
 }
 /* 여행지 추천 섹션 */
 .destinations {
@@ -65,30 +102,6 @@
           }
         }
       }
-    }
-  }
-
-  /* 캐러셀 버튼 */
-  .carousel_button {
-    position: absolute;
-    top: 30%;
-    right: 10%;
-    transform: translateY(-50%);
-    width: 32px;
-    height: 32px;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.8;
-    z-index: 5;
-
-    /* 캐러셀 벡터 이미지사이즈 */
-    img {
-      max-width: 8px;
-      max-height: 12px;
     }
   }
 }
