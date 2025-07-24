@@ -40,3 +40,7 @@
   width: fit-content;
   margin: -20px auto 40px;
 }
+
+.last_list_item {
+  margin-block-end: 100px;
+}
