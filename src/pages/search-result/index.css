@@ -5,10 +5,17 @@
 @import url(/src/components/view-more-button/style.css);
 
 .search_result_container {
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: auto;
   margin-top: 70px;
   padding: 0 24px;
+}
+
+.view_more_button_container {
+  width: 100%;
+  margin: 20px 0;
 }
