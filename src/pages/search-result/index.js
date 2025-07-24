@@ -25,6 +25,9 @@ const searchList = document.getElementById('search_list');
 const viewMoreButton = document.getElementById('view_more_button');
 const searchListTitle = document.getElementById('search_list_title');
 
+let currentIndex = 0;
+const ITEMS_PER_LOAD = 8;
+
 if (!searchList || !viewMoreButton || !searchListTitle) {
   console.error('필수 DOM 요소가 없습니다.');
 } else {
@@ -60,4 +63,12 @@ if (!searchList || !viewMoreButton || !searchListTitle) {
   renderCards();
 
   viewMoreButton.addEventListener('click', renderCards);
+}
+
+function escapeHTML(str) {
+  if (typeof str !== 'string') {
+    str = String(str || '');
+  }
+
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
