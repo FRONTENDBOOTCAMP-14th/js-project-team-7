@@ -1,5 +1,5 @@
 // Accordion 기능
-{
+(() => {
   const contents = document.querySelector('.contents');
 
   if (contents) {
@@ -12,4 +12,4 @@
       clickedListItem.classList.toggle('is_opened');
     });
   }
-}
+})();
