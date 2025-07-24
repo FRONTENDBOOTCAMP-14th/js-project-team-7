@@ -35,7 +35,7 @@ function renderCards() {
   const slice = destinations.slice(currentIndex, nextIndex);
 
   slice.forEach((dest) => {
-    const card = document.createElement('div');
+    const card = document.createElement('a');
     card.className = 'destination_card';
     card.innerHTML = `
       <div class="card_image">
