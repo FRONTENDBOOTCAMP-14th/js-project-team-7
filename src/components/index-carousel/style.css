@@ -17,7 +17,7 @@
 
 .section_controls {
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 
 .carousel_nav_button {
