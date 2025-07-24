@@ -7,17 +7,15 @@
     <title>Go7</title>
     <link rel="icon" href="/images/favicon.ico" />
     <link rel="stylesheet" href="/src//pages/search-result/index.css" />
-    <script src="/src/components/search-bar/search-bar.js"></script>
     <script type="module" src="/src/main.js"></script>
+    <script src="/src/components/search-bar/search-bar.js"></script>
   </head>
   <body>
     <div class="header_logo_container">
-      <!-- 동심원들 -->
       <div class="circle circle_1"></div>
       <div class="circle circle_2"></div>
       <div class="circle circle_3"></div>
       <div class="circle circle_4"></div>
-      <!-- 로고 텍스트 -->
       <div class="header_logo_text">Go7</div>
     </div>
     <div class="search_result_container">
@@ -29,60 +27,19 @@
         <ul class="suggestions" id="suggestions"></ul>
       </div>
       <div class="search_list_container">
-        <div class="search_list_title">총 n개의 도시 검색 결과</div>
-        <div class="search_list">
-          <div class="destination_card">
-            <div class="card_image">
-              <img src="/src/assets/travel-card-image.svg" alt="알래스카" />
-            </div>
-            <div class="card_content">
-              <h3 class="card_title">알래스카</h3>
-              <p class="card_subtitle">19개의 랜드마크</p>
-            </div>
-          </div>
-
-          <div class="destination_card">
-            <div class="card_image">
-              <img src="/src/assets/travel-card-image.svg" alt="알래스카" />
-            </div>
-            <div class="card_content">
-              <h3 class="card_title">알래스카</h3>
-              <p class="card_subtitle">19개의 랜드마크</p>
-            </div>
-          </div>
-
-          <div class="destination_card">
-            <div class="card_image">
-              <img src="/src/assets/travel-card-image.svg" alt="알래스카" />
-            </div>
-            <div class="card_content">
-              <h3 class="card_title">알래스카</h3>
-              <p class="card_subtitle">19개의 랜드마크</p>
-            </div>
-          </div>
-
-          <div class="destination_card">
-            <div class="card_image">
-              <img src="/src/assets/travel-card-image.svg" alt="알래스카" />
-            </div>
-            <div class="card_content">
-              <h3 class="card_title">알래스카</h3>
-              <p class="card_subtitle">19개의 랜드마크</p>
-            </div>
-          </div>
-        </div>
+        <div class="search_list_title" id="search_list_title"></div>
+        <div class="search_list" id="search_list"></div>
       </div>
-      <!-- <div class="view_more_button_container">
-        <button class="view_more_button" type="button"><span>+</span>더보기</button>
-      </div> -->
+      <div class="view_more_button_container">
+        <button class="view_more_button" id="view_more_button" type="button"><span>+</span>더보기</button>
+      </div>
     </div>
 
-    <main>
-      <footer class="footer">
-        <div class="footer_container">
-          <p class="footer_text">© 2025 Go7. All rights reserved</p>
-        </div>
-      </footer>
-    </main>
+    <footer class="footer">
+      <div class="footer_container">
+        <p class="footer_text">© 2025 Go7. All rights reserved</p>
+      </div>
+    </footer>
+    <script src="/src//pages/search-result/index.js"></script>
   </body>
 </html>
