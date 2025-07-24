@@ -21,9 +21,7 @@ viewCarousel.addEventListener('click', ({ target }) => {
     if (viewCarouselActiveIndex === -1) viewCarouselActiveIndex = viewCarouselCount - 1;
     else if (viewCarouselActiveIndex === viewCarouselCount) viewCarouselActiveIndex = 0;
 
-    console.log(viewCarouselActiveIndex);
     setViewCarouselStatus();
-
     moveActiveClass(viewCarouselItems, activeItems);
     setContentsWrapTranslate();
     setItemAria();
@@ -64,17 +62,36 @@ viewInfoContents.addEventListener('click', ({ target }) => {
 
   if (changeBtn) {
     const mapBtn = target.closest('.map');
-    const imgBtn = target.closest('.img');
 
     if (mapBtn) {
       viewMap.classList.add(ACTIVE_CLASS);
       viewMap.setAttribute('aria-hidden', 'false');
       viewCarousel.setAttribute('aria-hidden', 'true');
+      mapBtnFocus();
     } else {
       viewMap.classList.remove(ACTIVE_CLASS);
       viewMap.setAttribute('aria-hidden', 'true');
       viewCarousel.setAttribute('aria-hidden', 'false');
+      imgBtnFocus();
     }
   }
 });
+
+function mapBtnFocus() {
+  viewMap.querySelectorAll('button').forEach((btn) => {
+    btn.removeAttribute('tabindex');
+  });
+  viewCarousel.querySelectorAll('button').forEach((btn) => {
+    btn.setAttribute('tabindex', '-1');
+  });
+}
+
+function imgBtnFocus() {
+  viewCarousel.querySelectorAll('button').forEach((btn) => {
+    btn.removeAttribute('tabindex');
+  });
+  viewMap.querySelectorAll('button').forEach((btn) => {
+    btn.setAttribute('tabindex', '-1');
+  });
+}
 // 맵 관련 기능 구현 종료
