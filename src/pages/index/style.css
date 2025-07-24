@@ -25,3 +25,9 @@ header {
   margin-top: 70px;
   padding: 0 24px;
 }
+/* 캐러셀 섹션들 중앙 정렬 */
+.section_title,
+.destinations {
+  width: 100%;
+  max-width: 345px;
+}
