@@ -37,6 +37,7 @@ function renderCards() {
   slice.forEach((dest) => {
     const card = document.createElement('a');
     card.className = 'destination_card';
+    card.href = `/detail/${encodeURIComponent(dest.name)}`;
     card.innerHTML = `
       <div class="card_image">
         <img src="${dest.image}" alt="${dest.name}" />
