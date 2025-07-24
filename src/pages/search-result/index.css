@@ -4,6 +4,10 @@
 @import url(/src/components/search-list/search-list.css);
 @import url(/src/components/view-more-button/style.css);
 
+.hidden {
+  display: none !important;
+}
+
 .search_result_container {
   max-width: 480px;
   display: flex;

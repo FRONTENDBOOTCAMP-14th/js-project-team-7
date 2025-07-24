@@ -33,14 +33,30 @@ const ITEMS_PER_LOAD = 8;
 if (searchList && viewMoreButton && searchListTitle) {
   searchListTitle.textContent = `총 ${destinations.length}개의 도시 검색 결과`;
 
-  renderCards();
-  viewMoreButton.addEventListener('click', renderCards);
+  const initialSlice = updateState();
+  renderCards(initialSlice);
+
+  viewMoreButton.addEventListener('click', () => {
+    const nextSlice = updateState();
+    renderCards(nextSlice);
+  });
+} else {
+  console.error('필수 DOM 요소가 없습니다.');
 }
 
-function renderCards() {
+function updateState() {
   const nextIndex = currentIndex + ITEMS_PER_LOAD;
   const slice = destinations.slice(currentIndex, nextIndex);
+  currentIndex = nextIndex;
 
+  if (currentIndex >= destinations.length && viewMoreButton) {
+    viewMoreButton.classList.add('hidden');
+  }
+
+  return slice;
+}
+
+function renderCards(slice) {
   slice.forEach(({ name, landmarks, image }) => {
     const card = document.createElement('a');
     card.className = 'destination_card';
@@ -56,10 +72,4 @@ function renderCards() {
       `;
     searchList.appendChild(card);
   });
-
-  currentIndex = nextIndex;
-
-  if (currentIndex >= destinations.length) {
-    viewMoreButton.style.display = 'none';
-  }
 }
