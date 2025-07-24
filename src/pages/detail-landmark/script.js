@@ -88,7 +88,11 @@
     currentListItems.forEach((item, index) => {
       if (index >= startIndex && index < endIndex) {
         item.removeAttribute('aria-hidden');
-        item.style.display = 'flex';
+        if (item.classList.contains('landmark_list_item_wrapper')) {
+          item.style.display = 'grid';
+        } else {
+          item.style.display = 'flex';
+        }
       }
     });
 
