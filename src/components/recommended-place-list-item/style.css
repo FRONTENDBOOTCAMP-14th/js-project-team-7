@@ -12,6 +12,7 @@
 .accordion {
   display: flex;
   flex-flow: row nowrap;
+  position: relative;
   width: 100%;
 
   color: var(--color_black);
@@ -111,7 +112,6 @@
 
 /* is_opened 상태 스타일 */
 .accordion.is_opened {
-  position: relative;
   padding: 12px;
 }
 
