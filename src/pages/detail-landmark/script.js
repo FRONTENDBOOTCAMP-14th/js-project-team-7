@@ -105,6 +105,7 @@
       lastItem.classList.add('last_list_item');
     }
   });
+})();
 
 // Accordion 기능
 (() => {
