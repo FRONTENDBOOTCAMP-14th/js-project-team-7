@@ -109,4 +109,8 @@
   aspect-ratio: 16/10;
   background-color: var(--color_gray);
   transition: translate 0.4s;
+
+  &.is_active {
+    translate: 0 -100%;
+  }
 }
