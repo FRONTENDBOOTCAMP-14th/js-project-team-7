@@ -49,9 +49,8 @@
   // 탭의 첫 컨텐츠 갯수 제한
   function limitListItems() {
     const section = document.querySelector('.tab_content.is_selected');
-    const currentListItems = [...section.querySelectorAll('li')];
-
     if (!section) return;
+    const currentListItems = [...section.querySelectorAll('li')];
 
     if (currentListItems.length > ITEMS_PER_LOAD) {
       currentListItems.forEach((item, index) => {
