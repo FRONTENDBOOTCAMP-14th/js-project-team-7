@@ -8,6 +8,11 @@
   display: none !important;
 }
 
+.footer {
+  position: absolute;
+  bottom: 0;
+}
+
 .search_result_container {
   max-width: 480px;
   display: flex;
