@@ -6,6 +6,7 @@
   .view_info_title {
     display: flex;
     flex-flow: row wrap;
+    align-items: center;
 
     .title {
       font-weight: 300;
@@ -25,6 +26,22 @@
     .weather {
       margin-inline-start: auto;
       padding-inline-end: 10px;
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+
+      .weather_icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        aspect-ratio: 1;
+        font-size: var(--font_xl);
+      }
+
+      .weather_temp {
+        font-size: 10px;
+      }
     }
   }
 
