@@ -20,6 +20,7 @@
 }
 
 .view_more_button_container {
+  display: none;
   width: 100%;
   margin: 20px 0;
 }
