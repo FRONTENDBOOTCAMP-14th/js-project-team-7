@@ -1,3 +1,4 @@
+// Tab & View More Button 기능
 (() => {
   const tabContainer = document.querySelector('.tabs_container');
   if (!tabContainer) return;
@@ -104,4 +105,19 @@
       lastItem.classList.add('last_list_item');
     }
   });
+
+// Accordion 기능
+(() => {
+  const contents = document.querySelector('.contents');
+
+  if (contents) {
+    contents.addEventListener('click', (e) => {
+      const button = e.target.closest('.accordion .landmark_name_button');
+      const photo = e.target.closest('.photo_container');
+      if (!button && !photo) return;
+
+      const clickedListItem = (button || photo).closest('.accordion');
+      clickedListItem.classList.toggle('is_opened');
+    });
+  }
 })();
