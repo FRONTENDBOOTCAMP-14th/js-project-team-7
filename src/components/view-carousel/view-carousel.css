@@ -63,6 +63,10 @@
       justify-content: center;
       border-radius: var(--rounded_circle);
       background-color: var(--color_blue);
+
+      &.img {
+        inset: 10px 10px auto auto;
+      }
     }
   }
 }
