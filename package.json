@@ -10,6 +10,9 @@
     "all": "run-s clean build preview"
   },
   "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "eslint": "^9.32.0",
+    "globals": "^16.3.0",
     "npm-run-all": "^4.1.5",
     "vite": "^6.3.5"
   }
