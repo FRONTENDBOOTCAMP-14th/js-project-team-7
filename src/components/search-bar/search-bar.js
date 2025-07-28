@@ -5,18 +5,23 @@ const cities = new Set();
 let countryCityMap = {};
 
 async function getAllCountriesAndCities() {
-  const res = await fetch('https://countriesnow.space/api/v0.1/countries');
-  const { data } = await res.json();
-
-  data.forEach((item) => {
-    countries.add(item.country);
-    item.cities.forEach((city) => cities.add(city));
-
-    if (!countryCityMap[item.country]) {
-      countryCityMap[item.country] = [];
+  try {
+    const res = await fetch('https://countriesnow.space/api/v0.1/countries');
+    if (!res.ok) {
+      throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
     }
-    countryCityMap[item.country].push(...item.cities);
-  });
+    const { data } = await res.json();
+    data.forEach((item) => {
+      countries.add(item.country);
+      item.cities.forEach((city) => cities.add(city));
+      if (!countryCityMap[item.country]) {
+        countryCityMap[item.country] = [];
+      }
+      countryCityMap[item.country].push(...item.cities);
+    });
+  } catch (error) {
+    console.error('Error fetching countries and cities:', error);
+  }
 }
 
 getAllCountriesAndCities();
@@ -75,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (matchedCity) {
       renderSearchResults([matchedCity]);
     } else {
-      console.log('검색 결과 없음');
-      return [];
+      suggestionsBox.innerHTML = '<li class="no-results">검색 결과 없음</li>';
+      showSuggestions();
     }
   }
 

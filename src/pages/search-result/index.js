@@ -1,5 +1,6 @@
 const photoApiKey = import.meta.env.VITE_GOOGLE_PHOTO_API_KEY;
 const placeApiKey = import.meta.env.VITE_GOOGLE_PLACE_API_KEY;
+const API_DELAY_MS = 300;
 
 export function getPhotoUrl(photoReference, apiKey, maxWidth = 400) {
   if (!photoReference) return null;
@@ -27,18 +28,17 @@ export async function getCityData(cities, option) {
         },
       });
 
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}. Failed for city: ${city}, query: ${params.query}`);
 
       const data = await response.json();
       results.push({ city, results: data.results || [] });
 
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, API_DELAY_MS));
     } catch (error) {
       console.error(`Failed to fetch data for city ${city}:`, error);
       results.push({ city, results: [], error: error.message });
     }
   }
-  console.log(results);
   return results;
 }
 
