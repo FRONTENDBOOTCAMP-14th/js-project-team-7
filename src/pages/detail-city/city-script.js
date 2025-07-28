@@ -38,57 +38,59 @@ function getPlaceData(keyword, option) {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       const results = data.results;
-      if (!results || results.length === 0) {
-        console.log('검색 결과 없음');
-        return;
-      }
+      if (!results || results.length === 0) return;
 
-      let isFirstLi = true;
-      let totalPhotoCount = 0;
-      const MAX_PHOTO_COUNT = 10;
-
-      results.forEach((place) => {
-        if (place.photos && place.photos.length > 0) {
-          for (let i = 0; i < place.photos.length; i++) {
-            if (totalPhotoCount >= MAX_PHOTO_COUNT) break;
-
-            const photo = place.photos[i];
-            const li = document.createElement('li');
-
-            if (isFirstLi) {
-              li.classList.add('is_active', 'view_carousel_item');
-              isFirstLi = false;
-            } else {
-              li.classList.add('view_carousel_item');
-              li.setAttribute('aria-hidden', 'true');
-            }
-
-            li.style.backgroundImage = `url(${getPhotoUrl(photo.photo_reference)})`;
-            const span = document.createElement('span');
-            span.textContent = place.name;
-            span.classList.add('sr_only');
-
-            li.appendChild(span);
-            document.querySelector('.view_carousel_list').appendChild(li);
-
-            totalPhotoCount++;
-          }
-        }
-
-        if (totalPhotoCount >= MAX_PHOTO_COUNT) return;
-      });
-
+      renderPhotoList(results);
       carouselFn();
-      setDataRender(results[0]);
+      handlePlaceResult(results[0]);
     })
     .catch((error) => {
       console.error('❌ 요청 실패:', error.message);
     });
 }
+// 구글 플레이스 JS 종료
 
-function setDataRender(result) {
+// 사진 목록 추출 후 렌더링 하는 함수
+function renderPhotoList(results) {
+  const MAX_PHOTO_COUNT = 10;
+  let isFirstLi = true;
+  let totalPhotoCount = 0;
+
+  results.forEach((place) => {
+    if (place.photos && place.photos.length > 0) {
+      for (let i = 0; i < place.photos.length; i++) {
+        if (totalPhotoCount >= MAX_PHOTO_COUNT) break;
+        const viewCarouselList = document.querySelector('.view_carousel_list');
+        const photo = place.photos[i];
+        const li = document.createElement('li');
+
+        if (isFirstLi) {
+          li.classList.add('is_active', 'view_carousel_item');
+          isFirstLi = false;
+        } else {
+          li.classList.add('view_carousel_item');
+          li.setAttribute('aria-hidden', 'true');
+        }
+
+        li.style.backgroundImage = `url(${getPhotoUrl(photo.photo_reference)})`;
+        const span = document.createElement('span');
+        span.textContent = place.name;
+        span.classList.add('sr_only');
+
+        li.appendChild(span);
+        viewCarouselList.appendChild(li);
+
+        totalPhotoCount++;
+      }
+    }
+
+    if (totalPhotoCount >= MAX_PHOTO_COUNT) return;
+  });
+}
+
+// 결과 데이터로 여러곳을 제어하는 함수
+function handlePlaceResult(result) {
   const positionLat = result.geometry.location.lat;
   const positionLng = result.geometry.location.lng;
 
@@ -105,12 +107,9 @@ function setDataRender(result) {
   });
 
   showGoogleMapEmbed(positionLat, positionLng);
-  getTitleData(positionLat, positionLng);
+  renderDetailText(positionLat, positionLng);
 }
 
-// 구글 플레이스 JS 종료
-
-// 날씨 관련 JS 시작
 // 날씨 코드 받아서 코드에 따라 아이콘 리턴하는 함수
 function getWeatherIcon(weatherCode, iconCode) {
   // 낮인 경우
@@ -180,71 +179,43 @@ function getWeatherInfo(lat, lon, callback) {
       });
     });
 }
-// 날씨 관련 JS 종료
-
-// 도시 혹은 랜드마크 디스크립션 불러오는 JS 시작
-function getDescription(keyword, callback) {
-  fetch(`https://ko.wikipedia.org/api/rest_v1/page/summary/${keyword}`)
-    .then((res) => {
-      if (!res.ok) {
-        if (res.status === 404) {
-          throw new Error('해당 위치를 찾을 수 없습니다.');
-        } else if (res.status === 401) {
-          throw new Error('API 키가 유효하지 않습니다.');
-        } else {
-          throw new Error('디스크립션 정보를 가져오는데 실패했습니다.');
-        }
-      }
-      return res.json();
-    })
-    .then((data) => {
-      console.log(data);
-      const des = data.extract;
-
-      callback({
-        success: true,
-        des,
-      });
-    })
-    .catch((error) => {
-      callback({
-        success: false,
-        error: error.message,
-      });
-    });
-}
-// 도시 혹은 랜드마크 디스크립션 불러오는 JS 종료
 
 // 좌표 값을 통해 나라 및 도시 이름 가져오는 함수
-function getTitleData(lat, lng) {
+function renderDetailText(lat, lng) {
   fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-    .then((res) => {
-      if (!res.ok) throw new Error('네트워크 응답 오류');
-      return res.json();
-    })
+    .then((res) => res.json())
     .then((data) => {
-      console.log(data);
-      document.querySelector('.view_info_title .title span').textContent = data.address.country;
-      document.querySelector('.view_info_title .title strong').textContent = data.address.city;
+      const country = data.address.country;
+      const city = data.address.city;
 
-      getDescription(data.address.city, function (wiki) {
-        if (wiki.success) {
-          document.querySelector('.view_info_description').innerHTML = `
-            ${wiki.des}
-          `;
-        } else {
-          console.error('에러:', wiki.error);
-          document.querySelector('.view_info_description').innerHTML = `
-            아쉽게도 설명할 문구가 없네요. 😢
-          `;
-        }
-      });
+      document.querySelector('.view_info_title .title span').textContent = country;
+      document.querySelector('.view_info_title .title strong').textContent = city;
+
+      return getDescriptionPromise(city);
+    })
+    .then((wiki) => {
+      console.log(wiki);
+      if (wiki.success) {
+        document.querySelector('.view_info_description').innerHTML = wiki.des;
+      } else {
+        throw new Error(wiki.error);
+      }
     })
     .catch((error) => {
-      console.error(error);
+      console.error('타이틀 또는 설명 처리 실패:', error.message);
+      document.querySelector('.view_info_description').innerHTML = '아쉽게도 설명할 문구가 없네요. 😢';
     });
 }
 
+// 도시 혹은 랜드마크 디스크립션 불러오는 JS 시작
+function getDescriptionPromise(keyword) {
+  return fetch(`https://ko.wikipedia.org/api/rest_v1/page/summary/${keyword}`)
+    .then((res) => res.json())
+    .then((data) => ({ success: true, des: data.extract }))
+    .catch((error) => ({ success: false, error: error.message }));
+}
+
+// 구글 지도 보여주는 함수
 function showGoogleMapEmbed(lat, lng) {
   document.querySelector('.view_map').insertAdjacentHTML(
     'afterbegin',
@@ -259,7 +230,9 @@ function showGoogleMapEmbed(lat, lng) {
   );
 }
 
+// UI 기능 구현 함수
 function carouselFn() {
+  const ACTIVE_CLASS = 'is_active';
   const viewCarousel = document.querySelector('.view_carousel');
 
   if (!viewCarousel) {
@@ -271,59 +244,70 @@ function carouselFn() {
     } else {
       const viewCarouselItems = Array.from(viewCarousel.querySelectorAll('.view_carousel_item'));
       const viewCarouselCount = viewCarouselItems.length;
-      const viewCarouselStatus = viewCarousel.querySelector('.view_carousel_status');
-      const ACTIVE_CLASS = 'is_active';
 
-      // 캐러셀 기능 구현 시작
-      let viewCarouselActiveIndex = viewCarouselItems.findIndex((item) => item.classList.contains(ACTIVE_CLASS));
-      setViewCarouselStatus();
+      if (viewCarouselCount <= 1) {
+        viewCarousel.querySelector('.view_carousel_nav').style.display = 'none';
 
-      viewCarousel.addEventListener('click', ({ target }) => {
-        const arrowBtn = target.closest('.view_carousel_btn');
-
-        if (arrowBtn) {
-          const prevBtn = target.closest('.prev');
-          const activeItems = viewCarouselList.querySelector(`li.${ACTIVE_CLASS}`);
-
-          prevBtn ? viewCarouselActiveIndex-- : viewCarouselActiveIndex++;
-
-          if (viewCarouselActiveIndex === -1) viewCarouselActiveIndex = viewCarouselCount - 1;
-          else if (viewCarouselActiveIndex === viewCarouselCount) viewCarouselActiveIndex = 0;
-
-          setViewCarouselStatus();
-          moveActiveClass(viewCarouselItems, activeItems);
-          setContentsWrapTranslate();
-          setItemAria();
+        if (viewCarouselCount === 0) {
+          const noneImgText = document.createElement('span');
+          noneImgText.classList.add('none_img');
+          noneImgText.textContent = '아쉽게도 이미지가 없어요! 😅';
+          viewCarousel.insertAdjacentElement('afterbegin', noneImgText);
         }
-      });
+      } else {
+        const viewCarouselStatus = viewCarousel.querySelector('.view_carousel_status');
 
-      function moveActiveClass(addClassEl, removeClassEl) {
-        removeClassEl.classList.remove(ACTIVE_CLASS);
+        // 캐러셀 기능 구현 시작
+        let viewCarouselActiveIndex = viewCarouselItems.findIndex((item) => item.classList.contains(ACTIVE_CLASS));
+        setViewCarouselStatus();
 
-        if (!Array.isArray(addClassEl)) return addClassEl.classList.add(ACTIVE_CLASS);
-        addClassEl[viewCarouselActiveIndex].classList.add(ACTIVE_CLASS);
-      }
+        viewCarousel.addEventListener('click', ({ target }) => {
+          const arrowBtn = target.closest('.view_carousel_btn');
 
-      function setContentsWrapTranslate() {
-        viewCarouselList.style.setProperty('translate', `-${100 * viewCarouselActiveIndex}%`);
-      }
+          if (arrowBtn) {
+            const prevBtn = target.closest('.prev');
+            const activeItems = viewCarouselList.querySelector(`li.${ACTIVE_CLASS}`);
 
-      function setItemAria() {
-        viewCarouselItems.forEach((content, i) => {
-          if (i === viewCarouselActiveIndex) content.setAttribute('aria-hidden', 'false');
-          else content.setAttribute('aria-hidden', 'true');
+            prevBtn ? viewCarouselActiveIndex-- : viewCarouselActiveIndex++;
+
+            if (viewCarouselActiveIndex === -1) viewCarouselActiveIndex = viewCarouselCount - 1;
+            else if (viewCarouselActiveIndex === viewCarouselCount) viewCarouselActiveIndex = 0;
+
+            setViewCarouselStatus();
+            moveActiveClass(viewCarouselItems, activeItems);
+            setContentsWrapTranslate();
+            setItemAria();
+          }
         });
-      }
 
-      function setViewCarouselStatus() {
-        viewCarouselStatus.querySelector('span:first-child').textContent = `총 ${viewCarouselCount}페이지 중 ${viewCarouselActiveIndex + 1}`;
-        viewCarouselStatus.querySelector('span:last-child').textContent = `${viewCarouselActiveIndex + 1} / ${viewCarouselCount}`;
-      }
-      // 캐러셀 기능 구현 종료
+        function moveActiveClass(addClassEl, removeClassEl) {
+          removeClassEl.classList.remove(ACTIVE_CLASS);
 
+          if (!Array.isArray(addClassEl)) return addClassEl.classList.add(ACTIVE_CLASS);
+          addClassEl[viewCarouselActiveIndex].classList.add(ACTIVE_CLASS);
+        }
+
+        function setContentsWrapTranslate() {
+          viewCarouselList.style.setProperty('translate', `-${100 * viewCarouselActiveIndex}%`);
+        }
+
+        function setItemAria() {
+          viewCarouselItems.forEach((content, i) => {
+            if (i === viewCarouselActiveIndex) content.setAttribute('aria-hidden', 'false');
+            else content.setAttribute('aria-hidden', 'true');
+          });
+        }
+
+        function setViewCarouselStatus() {
+          viewCarouselStatus.querySelector('span:first-child').textContent = `총 ${viewCarouselCount}페이지 중 ${viewCarouselActiveIndex + 1}`;
+          viewCarouselStatus.querySelector('span:last-child').textContent = `${viewCarouselActiveIndex + 1} / ${viewCarouselCount}`;
+        }
+        // 캐러셀 기능 구현 종료
+      }
       // 맵 관련 기능 구현 시작
       const viewInfoContents = document.querySelector('.view_info_contents');
       const viewMap = viewInfoContents.querySelector('.view_map');
+
       viewInfoContents.addEventListener('click', ({ target }) => {
         const changeBtn = target.closest('.change_btn');
 
@@ -368,7 +352,6 @@ function carouselFn() {
         });
       }
       // 맵 관련 기능 구현 종료
-      console.log(viewMap.querySelectorAll('a'));
     }
   }
 }
