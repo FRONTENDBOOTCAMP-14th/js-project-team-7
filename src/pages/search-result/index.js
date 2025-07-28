@@ -107,3 +107,25 @@ export async function renderSearchResults(items) {
     });
   }
 }
+
+// 페이지 로드시 URL 파라미터 처리 (정연 추가 코드)
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const citiesParam = urlParams.get('cities');
+  const queryParam = urlParams.get('query');
+
+  if (citiesParam) {
+    try {
+      const cities = JSON.parse(decodeURIComponent(citiesParam));
+      console.log('URL에서 받은 도시 목록:', cities);
+      renderSearchResults(cities);
+    } catch (error) {
+      console.error('도시 목록 파싱 오류:', error);
+    }
+  } else if (queryParam) {
+    const query = decodeURIComponent(queryParam);
+    console.log('URL에서 받은 검색어:', query);
+    // 검색어를 도시로 취급하여 검색 결과 표시
+    renderSearchResults([query]);
+  }
+});
