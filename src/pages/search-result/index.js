@@ -108,7 +108,7 @@ export async function renderSearchResults(items) {
   }
 }
 
-// 페이지 로드시 URL 파라미터 처리
+// 페이지 로드시 URL 파라미터 처리 (정연 추가 코드)
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const citiesParam = urlParams.get('cities');
