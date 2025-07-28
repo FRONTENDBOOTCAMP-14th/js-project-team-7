@@ -227,7 +227,7 @@ function getTitleData(lat, lng) {
       document.querySelector('.view_info_title .title span').textContent = data.address.country;
       document.querySelector('.view_info_title .title strong').textContent = KEYWORD_LAND;
 
-      getDescription(KEYWORD_LAND, function (wiki) {
+      getDescription(data.address.city, function (wiki) {
         if (wiki.success) {
           document.querySelector('.view_info_description').innerHTML = `
             ${wiki.des}
@@ -331,12 +331,18 @@ function carouselFn() {
           const mapBtn = target.closest('.map');
 
           if (mapBtn) {
-            viewMap.classList.add(ACTIVE_CLASS);
+            setTimeout(() => {
+              viewMap.classList.add(ACTIVE_CLASS);
+            }, 100);
+            viewMap.style.display = 'block';
             viewMap.setAttribute('aria-hidden', 'false');
             viewCarousel.setAttribute('aria-hidden', 'true');
             mapBtnFocus();
           } else {
             viewMap.classList.remove(ACTIVE_CLASS);
+            setTimeout(() => {
+              viewMap.style.display = 'none';
+            }, 400);
             viewMap.setAttribute('aria-hidden', 'true');
             viewCarousel.setAttribute('aria-hidden', 'false');
             imgBtnFocus();
@@ -362,6 +368,7 @@ function carouselFn() {
         });
       }
       // 맵 관련 기능 구현 종료
+      console.log(viewMap.querySelectorAll('a'));
     }
   }
 }

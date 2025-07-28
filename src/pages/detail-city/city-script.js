@@ -3,7 +3,7 @@ const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const GOOGLE_PHOTO_API_KEY = import.meta.env.VITE_GOOGLE_PHOTO_API_KEY;
 
-const KEYWORD_CITY = 'Seoul';
+const KEYWORD_CITY = '인천';
 
 getPlaceData(KEYWORD_CITY, 'tourism');
 
@@ -331,12 +331,18 @@ function carouselFn() {
           const mapBtn = target.closest('.map');
 
           if (mapBtn) {
-            viewMap.classList.add(ACTIVE_CLASS);
+            setTimeout(() => {
+              viewMap.classList.add(ACTIVE_CLASS);
+            }, 100);
+            viewMap.style.display = 'block';
             viewMap.setAttribute('aria-hidden', 'false');
             viewCarousel.setAttribute('aria-hidden', 'true');
             mapBtnFocus();
           } else {
             viewMap.classList.remove(ACTIVE_CLASS);
+            setTimeout(() => {
+              viewMap.style.display = 'none';
+            }, 400);
             viewMap.setAttribute('aria-hidden', 'true');
             viewCarousel.setAttribute('aria-hidden', 'false');
             imgBtnFocus();
@@ -362,6 +368,7 @@ function carouselFn() {
         });
       }
       // 맵 관련 기능 구현 종료
+      console.log(viewMap.querySelectorAll('a'));
     }
   }
 }
