@@ -7,6 +7,15 @@
 .hidden {
   display: none !important;
 }
+body {
+  min-height: 100vh;
+  position: relative;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+}
 
 .search_result_container {
   max-width: 480px;
@@ -17,6 +26,7 @@
   margin: auto;
   margin-top: 70px;
   padding: 0 24px;
+  padding-bottom: 80px;
 }
 
 .view_more_button_container {
