@@ -316,7 +316,7 @@ function getPhotoUrl(photoReference, apiKey, maxWidth = 400) {
 }
 
 async function renderSearchResults(items) {
-  const DETAIL_PATH = '/detail/';
+  const DETAIL_PATH = '/src/pages/detail-city/index.html';
   const photoApiKey = import.meta.env.VITE_GOOGLE_PHOTO_API_KEY;
   const placeApiKey = import.meta.env.VITE_GOOGLE_PLACE_API_KEY;
 
@@ -368,7 +368,7 @@ async function renderSearchResults(items) {
 
       const card = document.createElement('a');
       card.className = 'destination_card';
-      card.href = `${DETAIL_PATH}${encodeURIComponent(city)}`;
+      card.href = `${DETAIL_PATH}?city=${encodeURIComponent(city)}`;
       card.innerHTML = `
         <div class="card_image">
           <img src="${imgUrl}" alt="${city}" />

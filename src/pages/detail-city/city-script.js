@@ -3,7 +3,10 @@ const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const GOOGLE_PHOTO_API_KEY = import.meta.env.VITE_GOOGLE_PHOTO_API_KEY;
 
-const KEYWORD_CITY = '인천';
+const urlParams = new URLSearchParams(window.location.search);
+const city = urlParams.get('city');
+
+const KEYWORD_CITY = city;
 
 getPlaceData(KEYWORD_CITY, 'tourism');
 
