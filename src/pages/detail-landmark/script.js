@@ -5,7 +5,7 @@
   const INITIAL_TAB = 'tourist_attraction';
 
   // 테스트용
-  const placeId = 'ChIJj61dQgK6j4AR4GeTYWZsKWw';
+  // const placeId = 'ChIJj61dQgK6j4AR4GeTYWZsKWw';
 
   let placeData;
 
@@ -45,8 +45,65 @@
     return Promise.all(photoPromises);
   }
 
+  // 검색 키워드 찾기
+  const urlParams = new URLSearchParams(window.location.search);
+  const city = urlParams.get('city');
+
+  // 테스트용
+  // const testCity = 'seoul';
+
+  // 검색 된 도시 placeId 구하기
+  async function getSearchedPlaceId(cityName) {
+    if (!cityName) {
+      throw new Error('도시 이름이 필요합니다');
+    }
+
+    const url = 'https://google-map-places-new-v2.p.rapidapi.com/v1/places:searchText';
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-rapidapi-key': GOOGLE_API_KEY_J,
+        'x-rapidapi-host': 'google-map-places-new-v2.p.rapidapi.com',
+        'Content-Type': 'application/json',
+        'X-Goog-FieldMask': 'places.id,places.displayName',
+      },
+      body: JSON.stringify({
+        textQuery: `${cityName} city`,
+        maxResultCount: 1,
+      }),
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+
+      if (result.places && result.places.length > 0) {
+        console.log('text search result', result);
+
+        const searchedPlaceId = result.places[0].id;
+        console.log(searchedPlaceId);
+        return searchedPlaceId;
+      } else {
+        throw new Error(`${cityName} 도시를 찾을 수 없습니다`);
+      }
+    } catch (error) {
+      console.error('도시 검색 오류:', error);
+      throw error;
+    }
+  }
+
   // 검색 된 도시 데이터 구하기
-  async function getPlaceData() {
+  async function getPlaceData(cityName) {
+    let placeId;
+
+    if (cityName) {
+      placeId = await getSearchedPlaceId(cityName);
+    } else {
+      // 기본값: 서울
+      placeId = 'ChIJzzlcLQGifDURm_JbQKHsEX4';
+    }
+
     const url = `https://google-map-places-new-v2.p.rapidapi.com/v1/places/${placeId}`;
 
     const options = {
@@ -61,16 +118,11 @@
     try {
       const response = await fetch(url, options);
       placeData = await response.json();
+      // console.log('getPlaceData placeData', placeData);
+      return placeData;
     } catch (error) {
       console.error(error);
     }
-
-    // 필요한 정보 추리기
-    const { displayName, formattedAddress, rating, googleMapsUri, regularOpeningHours, location, primaryType } = placeData;
-
-    const result = { placeName: displayName?.text, address: formattedAddress, rating, map: googleMapsUri, hours: regularOpeningHours, location: { latitude: location.latitude, longitude: location.longitude }, typeOfPlace: primaryType };
-
-    return result;
   }
 
   // 검색된 장소의 근처 places들 찾기
@@ -78,7 +130,7 @@
     const url = 'https://google-map-places-new-v2.p.rapidapi.com/v1/places:searchNearby';
 
     const { location } = placeDataParam;
-    // console.log(placeDataParam);
+    console.log('getNearbyPlaces placeDataParam', placeDataParam);
 
     const options = {
       method: 'POST',
@@ -131,6 +183,7 @@
   async function getHours(sortedData) {
     const hoursPromises = sortedData.map((place) => {
       const hours = place.currentOpeningHours;
+      if (!hours) return '';
 
       const openingHour = hours.periods?.[0].open.hour.toString().padStart(2, '0');
       const closingHour = hours.periods?.[0].close.hour.toString().padStart(2, '0');
@@ -210,7 +263,7 @@
   }
 
   // 함수 호출 체이닝
-  getPlaceData()
+  getPlaceData(city)
     .then((placeData) => {
       return getNearbyPlaces(placeData, INITIAL_TAB);
     })
