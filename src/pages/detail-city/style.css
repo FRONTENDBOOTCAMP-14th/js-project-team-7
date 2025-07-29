@@ -7,8 +7,22 @@
 @import url('/src/components/landmark-list-item/style.css');
 @import url('/src/components/view-more-button/style.css');
 
-.page_container {
+body {
+  background-color: #f9f9f9;
+}
+
+.sub_body {
   max-width: 420px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  background-color: #fff;
+  box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.01);
+}
+
+.page_container {
+  width: 100%;
   padding: 0 24px;
   margin: 0 auto;
 
@@ -39,4 +53,7 @@
   position: relative;
   width: fit-content;
   margin: -20px auto 40px;
+}
+.footer {
+  margin-top: auto;
 }

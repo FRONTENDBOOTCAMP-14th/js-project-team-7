@@ -43,7 +43,7 @@ export async function getCityData(cities, option) {
 }
 
 export async function renderSearchResults(items) {
-  const DETAIL_PATH = '/detail/';
+  const DETAIL_PATH = '/src/pages/detail-city/index.html';
 
   const searchList = document.getElementById('search_list');
   const viewMoreButton = document.getElementById('view_more_button');
@@ -93,7 +93,7 @@ export async function renderSearchResults(items) {
 
       const card = document.createElement('a');
       card.className = 'destination_card';
-      card.href = `${DETAIL_PATH}${encodeURIComponent(city)}`;
+      card.href = `${DETAIL_PATH}?city=${encodeURIComponent(city)}`;
       card.innerHTML = `
         <div class="card_image">
           <img src="${imgUrl}" alt="${city}" />
@@ -107,3 +107,25 @@ export async function renderSearchResults(items) {
     });
   }
 }
+
+// 페이지 로드시 URL 파라미터 처리 (정연 추가 코드)
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const citiesParam = urlParams.get('cities');
+  const queryParam = urlParams.get('query');
+
+  if (citiesParam) {
+    try {
+      const cities = JSON.parse(decodeURIComponent(citiesParam));
+      console.log('URL에서 받은 도시 목록:', cities);
+      renderSearchResults(cities);
+    } catch (error) {
+      console.error('도시 목록 파싱 오류:', error);
+    }
+  } else if (queryParam) {
+    const query = decodeURIComponent(queryParam);
+    console.log('URL에서 받은 검색어:', query);
+    // 검색어를 도시로 취급하여 검색 결과 표시
+    renderSearchResults([query]);
+  }
+});

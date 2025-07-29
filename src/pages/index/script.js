@@ -161,7 +161,7 @@ function createDestinationCard(cityData) {
   // console.log(`${city} 카드 생성 - 이미지:`, image);
 
   return `
-    <a href="/destination/${city.toLowerCase().replace(/\s+/g, '-')}" class="destination_card">
+    <a href="/src/pages/detail-city/index.html?city=${city.toLowerCase().replace(/\s+/g, '-')}" class="destination_card">
       <div class="card_image">
         <img src="${image}" alt="${title}" onerror="this.src='/public/images/travel-card-image.svg'" />
       </div>
@@ -307,10 +307,109 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 /**
- * 검색 기능 초기화
+ * 검색 기능 초기화 - search-bar 폴더에서 가져온 원본 코드
  */
+// search-result 페이지에서 가져온 함수들
+function getPhotoUrl(photoReference, apiKey, maxWidth = 400) {
+  if (!photoReference) return null;
+  return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=${maxWidth}&photo_reference=${photoReference}&key=${apiKey}`;
+}
+
+async function renderSearchResults(items) {
+  const DETAIL_PATH = '/src/pages/detail-city/index.html';
+  const photoApiKey = import.meta.env.VITE_GOOGLE_PHOTO_API_KEY;
+  const placeApiKey = import.meta.env.VITE_GOOGLE_PLACE_API_KEY;
+
+  const searchList = document.getElementById('search_list');
+  const viewMoreButton = document.getElementById('view_more_button');
+  const searchListTitle = document.getElementById('search_list_title');
+
+  let currentIndex = 0;
+  const ITEMS_PER_LOAD = 10;
+
+  if (!searchList || !viewMoreButton || !searchListTitle) {
+    console.error('필수 DOM 요소가 없습니다.');
+    return;
+  }
+
+  if (searchList && viewMoreButton && searchListTitle) {
+    searchList.innerHTML = '';
+    searchListTitle.textContent = `총 ${items.length}개의 도시 검색 결과`;
+
+    await fetchMoreData();
+
+    viewMoreButton.addEventListener('click', fetchMoreData);
+
+    async function fetchMoreData() {
+      const slice = items.slice(currentIndex, currentIndex + ITEMS_PER_LOAD);
+      currentIndex += ITEMS_PER_LOAD;
+
+      if (slice.length === 0) {
+        viewMoreButton.classList.add('hidden');
+        return;
+      }
+
+      const cityData = await getCityData(slice, 'tourist attractions');
+
+      if (currentIndex >= items.length) {
+        viewMoreButton.classList.add('hidden');
+      }
+
+      searchListTitle.textContent = `총 ${items.length}개의 도시 검색 결과`;
+
+      renderCards(cityData);
+    }
+  }
+
+  function renderCards(slice) {
+    slice.forEach(({ city, results }) => {
+      const photoReference = results[0]?.photos?.[0]?.photo_reference;
+      const imgUrl = photoReference ? getPhotoUrl(photoReference, photoApiKey, 600) : '/src/assets/travel-card-image.svg';
+
+      const card = document.createElement('a');
+      card.className = 'destination_card';
+      card.href = `${DETAIL_PATH}?city=${encodeURIComponent(city)}`;
+      card.innerHTML = `
+        <div class="card_image">
+          <img src="${imgUrl}" alt="${city}" />
+        </div>
+        <div class="card_content">
+          <h3 class="card_title">${city}</h3>
+          <p class="card_subtitle">${results.length}개의 랜드마크</p>
+        </div>
+      `;
+      searchList.appendChild(card);
+    });
+  }
+}
+
 function initSearchFeature() {
-  const keywords = ['서울', '경기', '부산', '제주', '강릉', '속초', '경주', '전주'];
+  // search-bar에서 가져온 원본 코드
+  const countries = new Set();
+  const cities = new Set();
+  let countryCityMap = {};
+
+  async function getAllCountriesAndCities() {
+    try {
+      const res = await fetch('https://countriesnow.space/api/v0.1/countries');
+      if (!res.ok) {
+        throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
+      }
+      const { data } = await res.json();
+      data.forEach((item) => {
+        countries.add(item.country);
+        item.cities.forEach((city) => cities.add(city));
+        if (!countryCityMap[item.country]) {
+          countryCityMap[item.country] = [];
+        }
+        countryCityMap[item.country].push(...item.cities);
+      });
+    } catch (error) {
+      console.error('Error fetching countries and cities:', error);
+    }
+  }
+
+  getAllCountriesAndCities();
 
   const searchInput = document.getElementById('search_input');
   const suggestionsBox = document.getElementById('suggestions');
@@ -321,21 +420,67 @@ function initSearchFeature() {
     return;
   }
 
+  let selectedIndex = -1; // 현재 선택된 li 인덱스
+
   const showSuggestions = () => {
     suggestionsBox.style.display = 'block';
   };
 
   const hideSuggestions = () => {
     suggestionsBox.style.display = 'none';
+    selectedIndex = -1; // 숨길 때 선택 초기화
   };
 
   const changeButtonColor = (color) => {
     searchButton.style.background = color;
   };
 
+  const clearSelection = () => {
+    const items = suggestionsBox.querySelectorAll('li');
+    items.forEach((item) => item.classList.remove('selected'));
+  };
+
+  const updateSelection = () => {
+    clearSelection();
+    const items = suggestionsBox.querySelectorAll('li');
+    if (selectedIndex >= 0 && selectedIndex < items.length) {
+      const selectedItem = items[selectedIndex];
+      selectedItem.classList.add('selected');
+      searchInput.value = selectedItem.textContent;
+    }
+  };
+
+  function handleSearch() {
+    const query = searchInput.value.trim();
+    if (!query) return;
+
+    hideSuggestions();
+
+    const countryArray = [...countries];
+    const cityArray = [...cities];
+
+    const lowerQuery = query.toLowerCase();
+
+    const matchedCountry = countryArray.find((c) => c.toLowerCase() === lowerQuery);
+    const matchedCity = cityArray.find((c) => c.toLowerCase() === lowerQuery);
+
+    if (matchedCountry) {
+      // 국가 매칭시 search-result 페이지로 이동
+      const cities = countryCityMap[matchedCountry];
+      window.location.href = `/src/pages/search-result/index.html?cities=${encodeURIComponent(JSON.stringify(cities))}`;
+    } else if (matchedCity) {
+      // 도시 매칭시 search-result 페이지로 이동
+      window.location.href = `/src/pages/search-result/index.html?cities=${encodeURIComponent(JSON.stringify([matchedCity]))}`;
+    } else {
+      // 매칭되지 않는 경우 검색어 그대로 전달
+      window.location.href = `/src/pages/search-result/index.html?query=${encodeURIComponent(query)}`;
+    }
+  }
+
   searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
     suggestionsBox.innerHTML = '';
+    selectedIndex = -1; // input 바뀌면 선택 초기화
 
     if (query.length > 0) {
       changeButtonColor('var(--color_blue)');
@@ -343,7 +488,16 @@ function initSearchFeature() {
       changeButtonColor('var(--color_black)');
     }
 
-    const filtered = keywords.filter((word) => word.includes(query));
+    const MAX_SUGGESTIONS = 10;
+    const allItems = [...countries, ...cities];
+
+    let filtered = [];
+
+    if (query.length <= 3) {
+      filtered = allItems.filter((word) => word.toLowerCase().startsWith(query)).slice(0, MAX_SUGGESTIONS);
+    } else {
+      filtered = allItems.filter((word) => word.toLowerCase().includes(query)).slice(0, MAX_SUGGESTIONS);
+    }
 
     if (query) {
       if (filtered.length > 0) {
@@ -353,6 +507,7 @@ function initSearchFeature() {
           li.addEventListener('click', () => {
             searchInput.value = word;
             hideSuggestions();
+            handleSearch();
           });
           suggestionsBox.appendChild(li);
         });
@@ -365,29 +520,32 @@ function initSearchFeature() {
     }
   });
 
-  // 검색 버튼 클릭 이벤트
-  searchButton.addEventListener('click', () => {
-    const query = searchInput.value.trim();
-    if (query) {
-      // 검색 결과 페이지로 이동
-      window.location.href = `/src/pages/search-result/index.html?query=${encodeURIComponent(query)}`;
-    }
-  });
+  searchInput.addEventListener('keydown', (event) => {
+    const items = suggestionsBox.querySelectorAll('li');
 
-  // Enter 키 검색
-  searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      const query = searchInput.value.trim();
-      if (query) {
-        window.location.href = `/src/pages/search-result/index.html?query=${encodeURIComponent(query)}`;
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (items.length === 0) return;
+      selectedIndex = (selectedIndex + 1) % items.length;
+      updateSelection();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (items.length === 0) return;
+      selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+      updateSelection();
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      if (selectedIndex >= 0 && selectedIndex < items.length) {
+        searchInput.value = items[selectedIndex].textContent;
+        hideSuggestions();
+        handleSearch();
+      } else {
+        handleSearch();
       }
     }
   });
 
-  // 외부 클릭 시 suggestions 숨기기
-  document.addEventListener('click', (e) => {
-    if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
-      hideSuggestions();
-    }
+  searchButton.addEventListener('click', () => {
+    handleSearch();
   });
 }
