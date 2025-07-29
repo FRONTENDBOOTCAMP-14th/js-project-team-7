@@ -1,5 +1,5 @@
-const photoApiKey = import.meta.env.VITE_GOOGLE_PHOTO_API_KEY;
-const placeApiKey = import.meta.env.VITE_GOOGLE_PLACE_API_KEY;
+const PHOTO_API_KEY = import.meta.env.VITE_GOOGLE_PHOTO_API_KEY;
+const PLACE_API_KEY = import.meta.env.VITE_GOOGLE_PLACE_API_KEY;
 const API_DELAY_MS = 300;
 
 export function getPhotoUrl(photoReference, apiKey, maxWidth = 400) {
@@ -23,7 +23,7 @@ export async function getCityData(cities, option) {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'x-rapidapi-key': placeApiKey,
+          'x-rapidapi-key': PLACE_API_KEY,
           'x-rapidapi-host': 'google-map-places.p.rapidapi.com',
         },
       });
@@ -39,6 +39,7 @@ export async function getCityData(cities, option) {
       results.push({ city, results: [], error: error.message });
     }
   }
+  console.log(results);
   return results;
 }
 
@@ -89,7 +90,7 @@ export async function renderSearchResults(items) {
   function renderCards(slice) {
     slice.forEach(({ city, results }) => {
       const photoReference = results[0]?.photos?.[0]?.photo_reference;
-      const imgUrl = photoReference ? getPhotoUrl(photoReference, photoApiKey, 600) : '/src/assets/travel-card-image.svg';
+      const imgUrl = photoReference ? getPhotoUrl(photoReference, PHOTO_API_KEY, 600) : '/src/assets/travel-card-image.svg';
 
       const card = document.createElement('a');
       card.className = 'destination_card';
