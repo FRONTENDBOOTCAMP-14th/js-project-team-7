@@ -39,7 +39,7 @@ export async function renderSearchResults(items) {
       viewMoreButton.classList.add('hidden');
     }
 
-    searchListTitle.textContent = `총 ${items.length}개의 도시 검색 결과`;
+    searchListTitle.textContent = `${items.length} cities found`;
 
     renderCards(cityData);
   }
@@ -60,7 +60,7 @@ export async function renderSearchResults(items) {
           </div>
           <div class="card_content">
             <h3 class="card_title">${city}</h3>
-            <p class="card_subtitle">${results.length}개의 랜드마크</p>
+            <p class="card_subtitle">${results.length} landmarks</p>
           </div>
         `;
 

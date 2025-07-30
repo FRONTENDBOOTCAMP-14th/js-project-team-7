@@ -184,7 +184,7 @@ function createDestinationCard(cityData) {
       </div>
       <div class="card_content">
         <h3 class="card_title">${title}</h3>
-        <p class="card_subtitle">${results.length}개의 랜드마크</p>
+        <p class="card_subtitle">${results.length} landmarks</p>
       </div>
     </a>
   `;
