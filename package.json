@@ -17,6 +17,7 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "p-limit": "^6.2.0",
     "prettier": "^3.6.2"
   }
 }
