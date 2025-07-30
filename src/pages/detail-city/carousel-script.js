@@ -1,6 +1,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 const city = urlParams.get('city');
 
+initBackbutton();
 renderDetailCarouselView(city);
 
 function renderDetailCarouselView(cityName) {
@@ -278,4 +279,15 @@ function initCarousel() {
       }
     }
   }
+}
+
+function initBackbutton() {
+  const backButton = document.querySelector('.view_nav_btn li:nth-child(2) a')
+  backButton.addEventListener('click', () => {
+    if (document.referrer === '') {
+      window.location.href = '/';
+    } else {
+      history.back();
+    }
+  });
 }

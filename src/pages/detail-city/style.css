@@ -21,9 +21,14 @@
   gap: 20px;
 }
 
-.view_more_button_container {
-  margin: 30px 0 70px 0;
+.tabs_container{
+  margin-bottom: 70px;
+
+  .view_more_button_container {
+    margin-top: 30px;
+  }
 }
+
 
 .view_nav_btn {
   position: relative;
