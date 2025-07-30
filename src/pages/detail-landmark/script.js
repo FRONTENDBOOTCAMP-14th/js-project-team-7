@@ -1,7 +1,10 @@
+import defaultImage from '../../assets/travel-card-image.svg';
+
 (() => {
   // API 연동
   const GOOGLE_API_KEY_J = import.meta.env.VITE_GOOGLE_API_KEY_J;
 
+  const DEFAULT_IMAGE = defaultImage;
   const INITIAL_TAB = 'tourist_attraction';
 
   // 테스트용
@@ -15,7 +18,7 @@
       const photoName = place.photos?.[0]?.name;
       // console.log('photoname', photoName);
       if (!photoName) {
-        return { ...place, photoUrl: null };
+        return { ...place, photoUrl: DEFAULT_IMAGE };
       }
 
       const url = `https://google-map-places-new-v2.p.rapidapi.com/v1/${photoName}/media?maxWidthPx=400&maxHeightPx=400&skipHttpRedirect=true`;
@@ -31,10 +34,17 @@
       try {
         const response = await fetch(url, options);
         const result = await response.json();
-        return { ...place, photoUrl: result.photoUri };
+
+        if (result) {
+          console.log(result.photoUri);
+          console.log(DEFAULT_IMAGE);
+          return { ...place, photoUrl: result.photoUri };
+        } else {
+          return { ...place, photoUrl: DEFAULT_IMAGE };
+        }
       } catch (error) {
         console.error(`Error fetching photo for ${place.displayName?.text}`, error);
-        return { ...place, photoUrl: null };
+        return { ...place, photoUrl: DEFAULT_IMAGE };
       }
     });
 
@@ -267,8 +277,8 @@
       const placeData = await getPlaceData(city);
       const sortedData = await getNearbyPlaces(placeData, INITIAL_TAB);
 
-      const sortedPlacesWithPhotos = await getPhotos(sortedData); 
-      const hoursArray = getHours(sortedData); 
+      const sortedPlacesWithPhotos = await getPhotos(sortedData);
+      const hoursArray = getHours(sortedData);
 
       const mergedData = sortedPlacesWithPhotos.map((place, idx) => ({
         ...place,
