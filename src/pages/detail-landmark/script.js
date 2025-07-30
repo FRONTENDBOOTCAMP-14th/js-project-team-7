@@ -267,8 +267,8 @@
       const placeData = await getPlaceData(city);
       const sortedData = await getNearbyPlaces(placeData, INITIAL_TAB);
 
-      const sortedPlacesWithPhotos = await getPhotos(sortedData); // 비동기만 await
-      const hoursArray = getHours(sortedData); // 동기는 그냥 실행
+      const sortedPlacesWithPhotos = await getPhotos(sortedData); 
+      const hoursArray = getHours(sortedData); 
 
       const mergedData = sortedPlacesWithPhotos.map((place, idx) => ({
         ...place,
