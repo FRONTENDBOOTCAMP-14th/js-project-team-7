@@ -20,7 +20,7 @@
   box-shadow: var(--shadow_base);
   background: white;
 
-  transition: all 0.3s ease;
+  transition: transform 0.8s ease;
 }
 
 .photo_container {
@@ -32,7 +32,7 @@
 
   display: flex;
   flex-flow: row nowrap;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 
   .photo {
     width: 100%;
@@ -66,8 +66,6 @@
     color: var(--color_gray);
     opacity: 0;
     max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
   }
 }
 
@@ -99,7 +97,7 @@
   right: 12px;
   opacity: 0;
   transform: scale(0);
-  transition: all 0.3s ease;
+  transition: opacity 0.8s ease;
 
   a {
     width: 100%;
@@ -121,7 +119,6 @@
 }
 
 .accordion.is_opened .accordion_item_contents {
-  margin-block: 10px;
   justify-content: flex-start;
 
   .landmark_name_button {
@@ -131,8 +128,16 @@
   .landmark_address,
   .landmark_hours {
     opacity: 1;
+  }
+
+  .landmark_address {
+    line-height: 1.2;
+    max-height: calc(100% - 20px);
+    margin-block-end: 5px;
+  }
+
+  .landmark_hours {
     max-height: 20px;
-    margin-block-end: 2px;
   }
 }
 
