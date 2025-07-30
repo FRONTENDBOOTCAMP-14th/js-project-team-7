@@ -11,35 +11,38 @@
     <script type="module" src="/src/components/search-bar/search-bar.js"></script>
   </head>
   <body>
-    <div class="header_logo_container">
-      <div class="circle circle_1"></div>
-      <div class="circle circle_2"></div>
-      <div class="circle circle_3"></div>
-      <div class="circle circle_4"></div>
-      <div class="header_logo_text">Go7</div>
-    </div>
-    <div class="search_result_container">
-      <div class="search_container">
-        <div class="search_bar">
-          <input type="text" class="search_input" id="search_input" placeholder="떠나고 싶은 곳은?" autocomplete="off" />
-          <button class="search_button" id="search_button"><img src="/src/assets/search.svg" alt="search" /></button>
+    <div class="sub_body">
+      <div class="header_logo_container">
+        <div class="circle circle_1"></div>
+        <div class="circle circle_2"></div>
+        <div class="circle circle_3"></div>
+        <div class="circle circle_4"></div>
+        <div class="header_logo_text">Go7</div>
+      </div>
+      <div class="page_container">
+        <div class="search_result_container">
+          <div class="search_container">
+            <div class="search_bar">
+              <input type="text" class="search_input" id="search_input" placeholder="떠나고 싶은 곳은?" autocomplete="off" />
+              <button class="search_button" id="search_button"><img src="/src/assets/search.svg" alt="search" /></button>
+            </div>
+            <ul class="suggestions" id="suggestions"></ul>
+          </div>
+          <div class="search_list_container">
+            <div class="search_list_title" id="search_list_title"></div>
+            <div class="search_list" id="search_list"></div>
+          </div>
+          <div class="view_more_button_container">
+            <button class="view_more_button" id="view_more_button" type="button"><span>+</span>더보기</button>
+          </div>
         </div>
-        <ul class="suggestions" id="suggestions"></ul>
       </div>
-      <div class="search_list_container">
-        <div class="search_list_title" id="search_list_title"></div>
-        <div class="search_list" id="search_list"></div>
-      </div>
-      <div class="view_more_button_container">
-        <button class="view_more_button" id="view_more_button" type="button"><span>+</span>더보기</button>
-      </div>
+      <footer class="footer">
+        <div class="footer_container">
+          <p class="footer_text">© 2025 Go7. All rights reserved</p>
+        </div>
+      </footer>
     </div>
-
-    <footer class="footer">
-      <div class="footer_container">
-        <p class="footer_text">© 2025 Go7. All rights reserved</p>
-      </div>
-    </footer>
-    <script type="module" src="/src//pages/search-result/index.js"></script>
+    <script type="module" src="/src/pages/search-result/index.js"></script>
   </body>
 </html>

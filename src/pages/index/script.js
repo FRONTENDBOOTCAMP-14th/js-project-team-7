@@ -22,80 +22,16 @@ const CITY_CATEGORIES = {
  */
 async function getCityInfoFromWikipedia(city) {
   try {
-    // 특정 도시들에 대해 여러 검색어 시도
-    const searchTerms = {
-      Bali: ['Ubud', 'Tanah Lot', 'Kuta Beach', 'Bali Indonesia'],
-      Santorini: ['Oia', 'Fira', 'Thira', 'Santorini Greece'],
-    };
+    // 1. 특별 검색어로 시도
+    const result = await trySpecialSearchTerms(city);
+    if (result) return result;
 
-    const termsToTry = searchTerms[city] || [city];
+    // 2. 기본 검색어로 시도
+    const basicResult = await tryBasicSearch(city);
+    if (basicResult) return basicResult;
 
-    // 각 검색어로 시도해서 이미지가 있는 것 찾기
-    for (const searchTerm of termsToTry) {
-      const enSearchUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(searchTerm)}`;
-      const enResponse = await fetch(enSearchUrl);
-
-      if (enResponse.ok) {
-        const data = await enResponse.json();
-        // console.log(`${searchTerm} Wikipedia 데이터:`, data);
-
-        // 이미지가 있고 disambiguation이 아니며, 몽타주나 지도가 아닌 경우
-        if (data.thumbnail?.source && data.type !== 'disambiguation' && !data.thumbnail.source.includes('Montage') && !data.thumbnail.source.includes('.svg')) {
-          return {
-            title: city, // 원래 도시 이름 사용
-            image: data.thumbnail.source,
-            extract: data.extract || '',
-          };
-        }
-      }
-    }
-
-    // 모든 특별 검색어 실패시 기본 검색
-    const enSearchUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(city)}`;
-    const enResponse = await fetch(enSearchUrl);
-
-    if (enResponse.ok) {
-      const data = await enResponse.json();
-      // console.log(`${city} 기본 Wikipedia 데이터:`, data);
-
-      // disambiguation 페이지인지 확인
-      if (data.type === 'disambiguation') {
-        // "city name city" 형태로 다시 시도
-        const citySearchTerm = `${city} city`;
-        const fallbackUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(citySearchTerm)}`;
-        const fallbackResponse = await fetch(fallbackUrl);
-        if (fallbackResponse.ok) {
-          const fallbackData = await fallbackResponse.json();
-          // console.log(`${city} 폴백 데이터:`, fallbackData);
-          return {
-            title: city, // 원래 도시 이름 사용
-            image: fallbackData.thumbnail?.source || null,
-            extract: fallbackData.extract || '',
-          };
-        }
-      }
-
-      return {
-        title: city, // 원래 도시 이름 사용
-        image: data.thumbnail?.source || null,
-        extract: data.extract || '',
-      };
-    }
-
-    // 영어 Wikipedia 실패시 한국어 시도
-    const koSearchUrl = `https://ko.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(city)}`;
-    const koResponse = await fetch(koSearchUrl);
-
-    if (koResponse.ok) {
-      const data = await koResponse.json();
-      return {
-        title: city, // 원래 도시 이름 사용
-        image: data.thumbnail?.source || null,
-        extract: data.extract || '',
-      };
-    }
-
-    return null;
+    // 3. 한국어 Wikipedia로 시도
+    return await tryKoreanWikipedia(city);
   } catch (error) {
     console.error(`Wikipedia API 호출 실패 (${city}):`, error);
     return null;
@@ -103,10 +39,91 @@ async function getCityInfoFromWikipedia(city) {
 }
 
 /**
+ * 특별 검색어들로 Wikipedia 검색 시도
+ */
+async function trySpecialSearchTerms(city) {
+  const SEARCH_TERMS = {
+    Bali: ['Ubud', 'Tanah Lot', 'Kuta Beach', 'Bali Indonesia'],
+    Santorini: ['Oia', 'Fira', 'Thira', 'Santorini Greece'],
+  };
+
+  const termsToTry = SEARCH_TERMS[city] || [city];
+
+  for (const searchTerm of termsToTry) {
+    const result = await fetchWikipediaData(searchTerm, 'en');
+    if (result && isValidImageData(result)) {
+      return createCityInfo(city, result);
+    }
+  }
+  return null;
+}
+
+/**
+ * 기본 검색어로 Wikipedia 검색 시도
+ */
+async function tryBasicSearch(city) {
+  const data = await fetchWikipediaData(city, 'en');
+  if (!data) return null;
+
+  // disambiguation 페이지 처리
+  if (data.type === 'disambiguation') {
+    const citySearchTerm = `${city} city`;
+    const fallbackData = await fetchWikipediaData(citySearchTerm, 'en');
+    return fallbackData ? createCityInfo(city, fallbackData) : null;
+  }
+
+  return createCityInfo(city, data);
+}
+
+/**
+ * 한국어 Wikipedia 검색 시도
+ */
+async function tryKoreanWikipedia(city) {
+  const data = await fetchWikipediaData(city, 'ko');
+  return data ? createCityInfo(city, data) : null;
+}
+
+/**
+ * Wikipedia API에서 데이터 가져오기
+ */
+async function fetchWikipediaData(searchTerm, language) {
+  const baseUrl = language === 'ko' ? 'https://ko.wikipedia.org' : 'https://en.wikipedia.org';
+  const searchUrl = `${baseUrl}/api/rest_v1/page/summary/${encodeURIComponent(searchTerm)}`;
+
+  try {
+    const response = await fetch(searchUrl);
+    return response.ok ? await response.json() : null;
+  } catch (error) {
+    console.error(`Wikipedia API 호출 실패 (${searchTerm}):`, error);
+    return null;
+  }
+}
+
+/**
+ * 이미지 데이터가 유효한지 검사
+ */
+function isValidImageData(data) {
+  return data.thumbnail?.source && data.type !== 'disambiguation' && !data.thumbnail.source.includes('Montage') && !data.thumbnail.source.includes('.svg');
+}
+
+/**
+ * 도시 정보 객체 생성
+ */
+function createCityInfo(city, data) {
+  return {
+    title: city,
+    image: data.thumbnail?.source || null,
+    extract: data.extract || '',
+  };
+}
+
+/**
  * 도시 데이터 가져오기 (Wikipedia API 사용)
  */
-export async function getCityData(cities, option) {
+export async function getCityData(cities) {
   const results = [];
+  const LANDMARK_COUNT = 20; // 랜드마크 개수 상수
+  const API_DELAY = 200; // API 요청 간 지연 시간 (ms)
 
   for (const city of cities) {
     try {
@@ -116,7 +133,7 @@ export async function getCityData(cities, option) {
       const cityInfo = await getCityInfoFromWikipedia(city);
 
       // 랜드마크는 단순히 20개로 고정
-      const landmarks = Array.from({ length: 20 }, (_, i) => ({
+      const landmarks = Array.from({ length: LANDMARK_COUNT }, (_, i) => ({
         name: `${city} Landmark ${i + 1}`,
         type: 'attraction',
         rating: '4.5',
@@ -132,12 +149,12 @@ export async function getCityData(cities, option) {
       // console.log(`${city}: ${landmarks.length}개 랜드마크 정보 로드 완료`);
 
       // API 요청 간 짧은 지연
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, API_DELAY));
     } catch (error) {
       console.error(`Failed to fetch data for city ${city}:`, error);
       results.push({
         city,
-        results: Array.from({ length: 20 }, (_, i) => ({
+        results: Array.from({ length: LANDMARK_COUNT }, (_, i) => ({
           name: `${city} Landmark ${i + 1}`,
           type: 'attraction',
           rating: '4.0',
@@ -161,7 +178,7 @@ function createDestinationCard(cityData) {
   // console.log(`${city} 카드 생성 - 이미지:`, image);
 
   return `
-    <a href="/destination/${city.toLowerCase().replace(/\s+/g, '-')}" class="destination_card">
+    <a href="/src/pages/detail-city/index.html?city=${encodeURIComponent(city)}" class="destination_card">
       <div class="card_image">
         <img src="${image}" alt="${title}" onerror="this.src='/public/images/travel-card-image.svg'" />
       </div>
@@ -179,10 +196,11 @@ function createDestinationCard(cityData) {
 async function initCarouselWithAPI(carouselElement, headerElement, category) {
   const track = carouselElement.querySelector('.carousel_track');
   const cities = CITY_CATEGORIES[category] || CITY_CATEGORIES.summer;
+  const LOADING_HEIGHT = 218; // 로딩 컨테이너 높이
 
   // 로딩 표시
   track.innerHTML = `
-    <div style="display: flex; align-items: center; justify-content: center; height: 218px; width: 100%;">
+    <div style="display: flex; align-items: center; justify-content: center; height: ${LOADING_HEIGHT}px; width: 100%;">
       <div style="text-align: center;">
         <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px;"></div>
         <p style="color: #666; font-size: 14px;">Wikipedia에서 ${category} 도시 정보를 불러오는 중...</p>
@@ -192,7 +210,7 @@ async function initCarouselWithAPI(carouselElement, headerElement, category) {
 
   try {
     // API에서 도시 데이터 가져오기
-    const cityData = await getCityData(cities, 'tourist attractions');
+    const cityData = await getCityData(cities);
 
     // 카드 HTML 생성
     track.innerHTML = cityData.map(createDestinationCard).join('');
@@ -204,7 +222,7 @@ async function initCarouselWithAPI(carouselElement, headerElement, category) {
 
     // 에러 발생시 기본 카드 표시
     track.innerHTML = `
-      <div style="display: flex; align-items: center; justify-content: center; height: 218px; width: 100%;">
+      <div style="display: flex; align-items: center; justify-content: center; height: ${LOADING_HEIGHT}px; width: 100%;">
         <p style="color: #999; text-align: center;">도시 정보를 불러올 수 없습니다.<br>API 연결을 확인해주세요.</p>
       </div>
     `;
@@ -212,63 +230,104 @@ async function initCarouselWithAPI(carouselElement, headerElement, category) {
 }
 
 // 캐러셀 기능 구현
+/**
+ * 캐러셀 기능 초기화 - 리팩토링된 버전
+ */
 function initCarousel(carouselElement, headerElement) {
+  const carouselState = createCarouselElementsAndState(carouselElement, headerElement);
+
+  if (!carouselState) return;
+
+  initializeCarouselPosition(carouselState);
+  setupCarouselNavigation(carouselState);
+}
+
+/**
+ * 캐러셀 요소들과 상태 생성
+ */
+function createCarouselElementsAndState(carouselElement, headerElement) {
   const track = carouselElement.querySelector('.carousel_track');
   const prevButton = headerElement.querySelector('.prev_button');
   const nextButton = headerElement.querySelector('.next_button');
   const cards = track.querySelectorAll('.destination_card');
 
-  let currentIndex = 0;
-  const cardWidth = 220; // 카드 너비
-  const gap = 15; // 카드 간격
-  const totalWidth = cardWidth + gap; // 카드 하나당 총 너비
-  const maxIndex = cards.length - 1; // 마지막 인덱스
+  if (!track || !prevButton || !nextButton) {
+    console.error('캐러셀 필수 요소를 찾을 수 없습니다.');
+    return null;
+  }
 
-  // 초기 설정
-  track.style.transform = `translateX(0px)`;
-  updateButtons();
+  return {
+    track,
+    prevButton,
+    nextButton,
+    cards,
+    currentIndex: 0,
+    CARD_WIDTH: 220, // 카드 너비
+    GAP: 15, // 카드 간격
+    TOTAL_WIDTH: 220 + 15, // 카드 하나당 총 너비
+    MAX_INDEX: cards.length - 1, // 마지막 인덱스
+  };
+}
 
+/**
+ * 캐러셀 초기 위치 설정
+ */
+function initializeCarouselPosition(carouselState) {
+  carouselState.track.style.transform = 'translateX(0px)';
+  updateCarouselButtons(carouselState);
+}
+
+/**
+ * 캐러셀 네비게이션 이벤트 설정
+ */
+function setupCarouselNavigation(carouselState) {
   // 이전 버튼 클릭 이벤트
-  prevButton.addEventListener('click', function () {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateCarousel();
-    }
+  carouselState.prevButton.addEventListener('click', function () {
+    moveCarouselToIndex(carouselState, carouselState.currentIndex - 1);
   });
 
   // 다음 버튼 클릭 이벤트
-  nextButton.addEventListener('click', function () {
-    if (currentIndex < maxIndex) {
-      currentIndex++;
-      updateCarousel();
-    }
+  carouselState.nextButton.addEventListener('click', function () {
+    moveCarouselToIndex(carouselState, carouselState.currentIndex + 1);
   });
+}
 
-  // 캐러셀 위치 업데이트
-  function updateCarousel() {
-    // 현재 인덱스의 카드가 컨테이너 맨 왼쪽에 오도록 이동
-    // 각 카드는 totalWidth(235px)만큼 이동
-    const translateX = -currentIndex * totalWidth;
-    track.style.transform = `translateX(${translateX}px)`;
-    track.style.transition = 'transform 0.3s ease';
-    updateButtons();
+/**
+ * 캐러셀을 특정 인덱스로 이동
+ */
+function moveCarouselToIndex(carouselState, newIndex) {
+  if (newIndex < 0 || newIndex > carouselState.MAX_INDEX) return;
+
+  carouselState.currentIndex = newIndex;
+  updateCarouselPosition(carouselState);
+  updateCarouselButtons(carouselState);
+}
+
+/**
+ * 캐러셀 위치 업데이트
+ */
+function updateCarouselPosition(carouselState) {
+  const translateX = -carouselState.currentIndex * carouselState.TOTAL_WIDTH;
+  carouselState.track.style.transform = `translateX(${translateX}px)`;
+  carouselState.track.style.transition = 'transform 0.3s ease';
+}
+
+/**
+ * 캐러셀 버튼 상태 업데이트
+ */
+function updateCarouselButtons(carouselState) {
+  // 이전 버튼 상태 관리
+  if (carouselState.currentIndex === 0) {
+    carouselState.prevButton.classList.add('disabled');
+  } else {
+    carouselState.prevButton.classList.remove('disabled');
   }
 
-  // 버튼 상태 업데이트
-  function updateButtons() {
-    // 이전 버튼 상태 관리
-    if (currentIndex === 0) {
-      prevButton.classList.add('disabled');
-    } else {
-      prevButton.classList.remove('disabled');
-    }
-
-    // 다음 버튼 상태 관리
-    if (currentIndex === maxIndex) {
-      nextButton.classList.add('disabled');
-    } else {
-      nextButton.classList.remove('disabled');
-    }
+  // 다음 버튼 상태 관리
+  if (carouselState.currentIndex === carouselState.MAX_INDEX) {
+    carouselState.nextButton.classList.add('disabled');
+  } else {
+    carouselState.nextButton.classList.remove('disabled');
   }
 }
 
@@ -307,87 +366,305 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 /**
- * 검색 기능 초기화
+ * 검색 기능 초기화 - search-bar 폴더에서 가져온 원본 코드
  */
 function initSearchFeature() {
-  const keywords = ['서울', '경기', '부산', '제주', '강릉', '속초', '경주', '전주'];
+  const searchState = createSearchState();
 
+  initializeCountriesAndCities(searchState);
+  const searchElements = getSearchElements();
+
+  if (!searchElements) return;
+
+  setupSearchEventListeners(searchState, searchElements);
+}
+
+/**
+ * 검색 상태 객체 생성
+ */
+function createSearchState() {
+  return {
+    countries: new Set(),
+    cities: new Set(),
+    countryCityMap: {},
+    selectedIndex: -1,
+  };
+}
+
+/**
+ * 국가와 도시 데이터 초기화
+ */
+async function initializeCountriesAndCities(searchState) {
+  try {
+    const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+    }
+
+    const { data } = await response.json();
+    populateSearchData(data, searchState);
+  } catch (error) {
+    console.error('Error fetching countries and cities:', error);
+  }
+}
+
+/**
+ * 검색 데이터 채우기
+ */
+function populateSearchData(data, searchState) {
+  data.forEach(function (item) {
+    searchState.countries.add(item.country);
+    item.cities.forEach(function (city) {
+      searchState.cities.add(city);
+    });
+
+    if (!searchState.countryCityMap[item.country]) {
+      searchState.countryCityMap[item.country] = [];
+    }
+    searchState.countryCityMap[item.country].push(...item.cities);
+  });
+}
+
+/**
+ * 검색 관련 DOM 요소들 가져오기
+ */
+function getSearchElements() {
   const searchInput = document.getElementById('search_input');
   const suggestionsBox = document.getElementById('suggestions');
   const searchButton = document.getElementById('search_button');
 
   if (!searchInput || !suggestionsBox || !searchButton) {
     console.error('검색 요소를 찾을 수 없습니다.');
-    return;
+    return null;
   }
 
-  const showSuggestions = () => {
-    suggestionsBox.style.display = 'block';
-  };
+  return { searchInput, suggestionsBox, searchButton };
+}
 
-  const hideSuggestions = () => {
-    suggestionsBox.style.display = 'none';
-  };
+/**
+ * 검색 이벤트 리스너 설정
+ */
+function setupSearchEventListeners(searchState, elements) {
+  const { searchInput, searchButton } = elements;
 
-  const changeButtonColor = (color) => {
-    searchButton.style.background = color;
-  };
+  // 입력 이벤트
+  searchInput.addEventListener('input', function () {
+    handleSearchInput(searchState, elements);
+  });
 
-  searchInput.addEventListener('input', () => {
-    const query = searchInput.value.toLowerCase();
-    suggestionsBox.innerHTML = '';
+  // 키보드 이벤트
+  searchInput.addEventListener('keydown', function (event) {
+    handleSearchKeydown(event, searchState, elements);
+  });
 
-    if (query.length > 0) {
-      changeButtonColor('var(--color_blue)');
+  // 검색 버튼 클릭
+  searchButton.addEventListener('click', function () {
+    handleSearchExecution(searchState, elements);
+  });
+}
+
+/**
+ * 검색 입력 처리
+ */
+function handleSearchInput(searchState, elements) {
+  const { searchInput, suggestionsBox, searchButton } = elements;
+  const query = searchInput.value.toLowerCase();
+
+  suggestionsBox.innerHTML = '';
+  searchState.selectedIndex = -1;
+
+  updateSearchButtonColor(query, searchButton);
+
+  if (query) {
+    const suggestions = getFilteredSuggestions(query, searchState);
+    if (suggestions.length > 0) {
+      renderSuggestions(suggestions, searchState, elements);
+      showSuggestions(suggestionsBox);
     } else {
-      changeButtonColor('var(--color_black)');
+      hideSuggestions(suggestionsBox);
     }
+  } else {
+    hideSuggestions(suggestionsBox);
+  }
+}
 
-    const filtered = keywords.filter((word) => word.includes(query));
+/**
+ * 검색 버튼 색상 업데이트
+ */
+function updateSearchButtonColor(query, searchButton) {
+  const color = query.length > 0 ? 'var(--color_blue)' : 'var(--color_black)';
+  searchButton.style.background = color;
+}
 
-    if (query) {
-      if (filtered.length > 0) {
-        filtered.forEach((word) => {
-          const li = document.createElement('li');
-          li.textContent = word;
-          li.addEventListener('click', () => {
-            searchInput.value = word;
-            hideSuggestions();
-          });
-          suggestionsBox.appendChild(li);
-        });
-        showSuggestions();
-      } else {
-        hideSuggestions();
-      }
-    } else {
-      hideSuggestions();
-    }
+/**
+ * 필터된 제안 목록 가져오기
+ */
+function getFilteredSuggestions(query, searchState) {
+  const MAX_SUGGESTIONS = 10;
+  const QUERY_LENGTH_THRESHOLD = 3;
+  const allItems = [...searchState.countries, ...searchState.cities];
+
+  if (query.length <= QUERY_LENGTH_THRESHOLD) {
+    return allItems
+      .filter(function (word) {
+        return word.toLowerCase().startsWith(query);
+      })
+      .slice(0, MAX_SUGGESTIONS);
+  } else {
+    return allItems
+      .filter(function (word) {
+        return word.toLowerCase().includes(query);
+      })
+      .slice(0, MAX_SUGGESTIONS);
+  }
+}
+
+/**
+ * 제안 목록 렌더링
+ */
+function renderSuggestions(suggestions, searchState, elements) {
+  const { suggestionsBox } = elements;
+
+  suggestions.forEach(function (word) {
+    const li = document.createElement('li');
+    li.textContent = word;
+    li.addEventListener('click', function () {
+      selectSuggestion(word, searchState, elements);
+    });
+    suggestionsBox.appendChild(li);
+  });
+}
+
+/**
+ * 제안 항목 선택 처리
+ */
+function selectSuggestion(word, searchState, elements) {
+  const { searchInput, suggestionsBox } = elements;
+  searchInput.value = word;
+  hideSuggestions(suggestionsBox);
+  handleSearchExecution(searchState, elements);
+}
+
+/**
+ * 키보드 이벤트 처리
+ */
+function handleSearchKeydown(event, searchState, elements) {
+  const { suggestionsBox } = elements;
+  const items = suggestionsBox.querySelectorAll('li');
+
+  switch (event.key) {
+    case 'ArrowDown':
+      event.preventDefault();
+      navigateSuggestions(1, items, searchState, elements);
+      break;
+    case 'ArrowUp':
+      event.preventDefault();
+      navigateSuggestions(-1, items, searchState, elements);
+      break;
+    case 'Enter':
+      event.preventDefault();
+      handleEnterKey(items, searchState, elements);
+      break;
+  }
+}
+
+/**
+ * 제안 목록 네비게이션
+ */
+function navigateSuggestions(direction, items, searchState, elements) {
+  if (items.length === 0) return;
+
+  searchState.selectedIndex = direction > 0 ? (searchState.selectedIndex + 1) % items.length : (searchState.selectedIndex - 1 + items.length) % items.length;
+
+  updateSelectionDisplay(items, searchState, elements);
+}
+
+/**
+ * Enter 키 처리
+ */
+function handleEnterKey(items, searchState, elements) {
+  const { searchInput } = elements;
+
+  if (searchState.selectedIndex >= 0 && searchState.selectedIndex < items.length) {
+    searchInput.value = items[searchState.selectedIndex].textContent;
+    hideSuggestions(elements.suggestionsBox);
+  }
+  handleSearchExecution(searchState, elements);
+}
+
+/**
+ * 선택 표시 업데이트
+ */
+function updateSelectionDisplay(items, searchState, elements) {
+  clearSelection(items);
+
+  if (searchState.selectedIndex >= 0 && searchState.selectedIndex < items.length) {
+    const selectedItem = items[searchState.selectedIndex];
+    selectedItem.classList.add('selected');
+    elements.searchInput.value = selectedItem.textContent;
+  }
+}
+
+/**
+ * 선택 표시 제거
+ */
+function clearSelection(items) {
+  items.forEach(function (item) {
+    item.classList.remove('selected');
+  });
+}
+
+/**
+ * 검색 실행 처리
+ */
+function handleSearchExecution(searchState, elements) {
+  const query = elements.searchInput.value.trim();
+  if (!query) return;
+
+  hideSuggestions(elements.suggestionsBox);
+
+  const countryArray = [...searchState.countries];
+  const cityArray = [...searchState.cities];
+  const lowerQuery = query.toLowerCase();
+
+  const matchedCountry = countryArray.find(function (c) {
+    return c.toLowerCase() === lowerQuery;
+  });
+  const matchedCity = cityArray.find(function (c) {
+    return c.toLowerCase() === lowerQuery;
   });
 
-  // 검색 버튼 클릭 이벤트
-  searchButton.addEventListener('click', () => {
-    const query = searchInput.value.trim();
-    if (query) {
-      // 검색 결과 페이지로 이동
-      window.location.href = `/src/pages/search-result/index.html?query=${encodeURIComponent(query)}`;
-    }
-  });
+  navigateToSearchResult(matchedCountry, matchedCity, query, searchState);
+}
 
-  // Enter 키 검색
-  searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      const query = searchInput.value.trim();
-      if (query) {
-        window.location.href = `/src/pages/search-result/index.html?query=${encodeURIComponent(query)}`;
-      }
-    }
-  });
+/**
+ * 검색 결과 페이지로 이동
+ */
+function navigateToSearchResult(matchedCountry, matchedCity, query, searchState) {
+  let url;
 
-  // 외부 클릭 시 suggestions 숨기기
-  document.addEventListener('click', (e) => {
-    if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
-      hideSuggestions();
-    }
-  });
+  if (matchedCountry) {
+    const matchedCities = searchState.countryCityMap[matchedCountry];
+    url = `/src/pages/search-result/index.html?cities=${encodeURIComponent(JSON.stringify(matchedCities))}`;
+  } else if (matchedCity) {
+    url = `/src/pages/search-result/index.html?cities=${encodeURIComponent(JSON.stringify([matchedCity]))}`;
+  } else {
+    url = `/src/pages/search-result/index.html?query=${encodeURIComponent(query)}`;
+  }
+
+  window.location.href = url;
+}
+
+/**
+ * 제안 목록 보이기
+ */
+function showSuggestions(suggestionsBox) {
+  suggestionsBox.style.display = 'block';
+}
+
+/**
+ * 제안 목록 숨기기
+ */
+function hideSuggestions(suggestionsBox) {
+  suggestionsBox.style.display = 'none';
 }
