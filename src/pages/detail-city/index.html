@@ -80,66 +80,32 @@
           </div>
           <p class="view_info_description"></p>
         </div>
-        <!-- 랜드마크 리스트 Tab -->
         <div class="tabs_container">
           <div class="tabs" role="tablist">
-            <button type="button" id="tab1" class="tab is_selected" role="tab" aria-selected="true" aria-controls="content1">tab 1</button>
-            <button type="button" id="tab2" class="tab" role="tab" aria-selected="false" aria-controls="content2">tab 2</button>
-            <button type="button" id="tab3" class="tab" role="tab" aria-selected="false" aria-controls="content3">tab 3</button>
+            <button type="button" id="tab1" class="tab is_selected" role="tab" aria-selected="true" aria-controls="content1" data-primary-type="tourist_attraction">Landmark</button>
+            <button type="button" id="tab2" class="tab" role="tab" aria-selected="false" aria-controls="content2" data-primary-type="restaurant">Restaurant</button>
+            <button type="button" id="tab3" class="tab" role="tab" aria-selected="false" aria-controls="content3" data-primary-type="cafe">Cafe</button>
+            <button type="button" id="tab4" class="tab" role="tab" aria-selected="false" aria-controls="content3" data-primary-type="bar">Bar</button>
           </div>
           <div class="contents">
-            <section id="content1" class="tab_content is_selected" role="tabpanel" aria-labelledby="tab1">
-              <!-- City Places -->
-              <ul class="landmark_list_item_container">
-                <li class="landmark_list_item_wrapper">
-                  <div class="photo_container">
-                    <img class="photo" src="/src/components/landmark-list-item/photo.png" alt="여행지" />
-                  </div>
-                  <div class="landmark_list_item_contents">
-                    <a class="landmark_link" href="/"><h2 class="landmark_name">남산타워</h2></a>
-                    <p class="landmark_description">관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요.</p>
-                  </div>
-                </li>
-                <li class="landmark_list_item_wrapper">
-                  <div class="photo_container">
-                    <img class="photo" src="/src/components/landmark-list-item/photo.png" alt="여행지" />
-                  </div>
-                  <div class="landmark_list_item_contents">
-                    <a class="landmark_link" href="/"><h2 class="landmark_name">남산타워</h2></a>
-                    <p class="landmark_description">관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요.</p>
-                  </div>
-                </li>
-              </ul>
+            <section id="content1" class="tab_content is_selected" role="tabpanel" aria-labelledby="tab1" data-primary-type="tourist_attraction">
+              <!-- Recommended Places -->
+              <ul class="accordion_container"></ul>
             </section>
-            <section id="content2" class="tab_content" role="tabpanel" aria-labelledby="tab2">
-              <!-- City Places -->
-              <ul class="landmark_list_item_container">
-                <li class="landmark_list_item_wrapper">
-                  <div class="photo_container">
-                    <img class="photo" src="/src/components/landmark-list-item/photo.png" alt="여행지" />
-                  </div>
-                  <div class="landmark_list_item_contents">
-                    <a class="landmark_link" href="/"><h2 class="landmark_name">남산타워</h2></a>
-                    <p class="landmark_description">관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요.</p>
-                  </div>
-                </li>
-              </ul>
+            <section id="content2" class="tab_content" role="tabpanel" aria-labelledby="tab2" data-primary-type="restaurant">
+              <!-- Recommended Places -->
+              <ul class="accordion_container"></ul>
             </section>
-            <section id="content3" class="tab_content" role="tabpanel" aria-labelledby="tab3">
-              <!-- City Places -->
-              <ul class="landmark_list_item_container">
-                <li class="landmark_list_item_wrapper">
-                  <div class="photo_container">
-                    <img class="photo" src="/src/components/landmark-list-item/photo.png" alt="여행지" />
-                  </div>
-                  <div class="landmark_list_item_contents">
-                    <a class="landmark_link" href="/"><h2 class="landmark_name">남산타워</h2></a>
-                    <p class="landmark_description">관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요. 관광지 설명을 적어주세요.</p>
-                  </div>
-                </li>
-              </ul>
+            <section id="content3" class="tab_content" role="tabpanel" aria-labelledby="tab3" data-primary-type="cafe">
+              <!-- Recommended Places -->
+              <ul class="accordion_container"></ul>
+            </section>
+            <section id="content4" class="tab_content" role="tabpanel" aria-labelledby="tab4" data-primary-type="bar">
+              <!-- Recommended Places -->
+              <ul class="accordion_container"></ul>
             </section>
           </div>
+
           <!-- View More Button -->
           <div class="view_more_button_container">
             <button class="view_more_button" type="button"><span>+</span>더보기</button>
