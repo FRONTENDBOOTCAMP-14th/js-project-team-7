@@ -1,7 +1,10 @@
+import defaultImage from '../../assets/travel-card-image.svg';
+
 (() => {
   // API 연동
   const GOOGLE_API_KEY_J = import.meta.env.VITE_GOOGLE_API_KEY_J;
 
+  const DEFAULT_IMAGE = defaultImage;
   const INITIAL_TAB = 'tourist_attraction';
 
   // 테스트용
@@ -13,8 +16,9 @@
   async function getPhotos(sortedPlaces) {
     const photoPromises = sortedPlaces.map(async (place) => {
       const photoName = place.photos?.[0]?.name;
+      // console.log('photoname', photoName);
       if (!photoName) {
-        return { ...place, photoUrl: null };
+        return { ...place, photoUrl: DEFAULT_IMAGE };
       }
 
       const url = `https://google-map-places-new-v2.p.rapidapi.com/v1/${photoName}/media?maxWidthPx=400&maxHeightPx=400&skipHttpRedirect=true`;
@@ -32,13 +36,15 @@
         const result = await response.json();
 
         if (result) {
+          console.log(result.photoUri);
+          console.log(DEFAULT_IMAGE);
           return { ...place, photoUrl: result.photoUri };
         } else {
-          return { ...place, photoUrl: null };
+          return { ...place, photoUrl: DEFAULT_IMAGE };
         }
       } catch (error) {
         console.error(`Error fetching photo for ${place.displayName?.text}`, error);
-        return { ...place, photoUrl: null };
+        return { ...place, photoUrl: DEFAULT_IMAGE };
       }
     });
 
@@ -55,7 +61,7 @@
   // 검색 된 도시 placeId 구하기
   async function getSearchedPlaceId(cityName) {
     if (!cityName) {
-      throw new Error('도시 이름이 필요합니다');
+      throw new Error('Location name needed.');
     }
 
     const url = 'https://google-map-places-new-v2.p.rapidapi.com/v1/places:searchText';
@@ -79,16 +85,15 @@
       const result = await response.json();
 
       if (result.places && result.places.length > 0) {
-        console.log('text search result', result);
+        // console.log('text search result', result);
 
         const searchedPlaceId = result.places[0].id;
-        console.log(searchedPlaceId);
         return searchedPlaceId;
       } else {
-        throw new Error(`${cityName} 도시를 찾을 수 없습니다`);
+        throw new Error(`${cityName} not found.`);
       }
     } catch (error) {
-      console.error('도시 검색 오류:', error);
+      console.error('Error in getting searched place ID:', error);
       throw error;
     }
   }
@@ -121,7 +126,8 @@
       // console.log('getPlaceData placeData', placeData);
       return placeData;
     } catch (error) {
-      console.error(error);
+      console.error('Error in getting place data:', error);
+      throw error;
     }
   }
 
@@ -130,7 +136,7 @@
     const url = 'https://google-map-places-new-v2.p.rapidapi.com/v1/places:searchNearby';
 
     const { location } = placeDataParam;
-    console.log('getNearbyPlaces placeDataParam', placeDataParam);
+    // console.log('getNearbyPlaces placeDataParam', placeDataParam);
 
     const options = {
       method: 'POST',
@@ -165,14 +171,15 @@
       result = await response.json();
       // console.log('nearby places', result);
     } catch (error) {
-      console.error(error);
+      console.error('Error in getting nearby places:', error);
+      throw error;
     }
 
     // 근처 장소 필터링 type&rating
     const sortedResult = result.places
       .filter((place) => place.rating !== undefined)
       .sort((a, b) => b.rating - a.rating)
-      .slice(0, 30);
+      .slice(0, 20);
 
     // console.log('sorted result', sortedResult);
 
@@ -180,15 +187,17 @@
   }
 
   // 장소들 영업시간 구하기
-  async function getHours(sortedData) {
+  function getHours(sortedData) {
     const hoursPromises = sortedData.map((place) => {
       const hours = place.currentOpeningHours;
       if (!hours) return '';
 
-      const openingHour = hours.periods?.[0].open.hour.toString().padStart(2, '0');
-      const closingHour = hours.periods?.[0].close.hour.toString().padStart(2, '0');
-      const openingMinute = hours.periods?.[0].open.minute.toString().padStart(2, '0');
-      const closingMinute = hours.periods?.[0].close.minute.toString().padStart(2, '0');
+      const { open, close } = hours.periods[0];
+
+      const openingHour = open.hour.toString().padStart(2, '0');
+      const closingHour = close.hour.toString().padStart(2, '0');
+      const openingMinute = open.minute.toString().padStart(2, '0');
+      const closingMinute = close.minute.toString().padStart(2, '0');
 
       const placeHours = `${openingHour}:${openingMinute} - ${closingHour}:${closingMinute}`;
 
@@ -199,7 +208,7 @@
   }
 
   // 추려낸 리스트 아이템 render
-  async function renderListItems(sortedData) {
+  function renderListItems(sortedData) {
     const section = document.querySelector('.tab_content.is_selected');
     if (!section) return;
     const listContainer = section.querySelector('ul');
@@ -220,7 +229,7 @@
         ({ placeName, address, rating, map, photoUrl, hours }) => `
               <li class="accordion">
                 <div class="photo_container">
-                  <img class="photo" src="${photoUrl}" alt="여행지" />
+                  <img class="photo" src="${photoUrl}" alt="${placeName}" />
                 </div>
                 <div class="accordion_item_contents">
                   <button class="landmark_name_button" type="button">
@@ -262,25 +271,28 @@
     });
   }
 
-  // 함수 호출 체이닝
-  getPlaceData(city)
-    .then((placeData) => {
-      return getNearbyPlaces(placeData, INITIAL_TAB);
-    })
-    .then((sortedData) => {
-      return Promise.all([getPhotos(sortedData), getHours(sortedData)]);
-    })
-    .then(([sortedPlacesWithPhotos, hoursArray]) => {
+  // 함수 호출
+  async function processPlaceData(city) {
+    try {
+      const placeData = await getPlaceData(city);
+      const sortedData = await getNearbyPlaces(placeData, INITIAL_TAB);
+
+      const sortedPlacesWithPhotos = await getPhotos(sortedData);
+      const hoursArray = getHours(sortedData);
+
       const mergedData = sortedPlacesWithPhotos.map((place, idx) => ({
         ...place,
         hours: hoursArray[idx],
       }));
-      // console.log('merged data', mergedData);
+
       renderListItems(mergedData);
-    })
-    .catch((error) => {
-      console.error('render error', error);
-    });
+    } catch (error) {
+      console.error('Error in processing place datas:', error);
+      throw error;
+    }
+  }
+
+  processPlaceData(city);
 
   // Tab & View More Button 기능
   const tabContainer = document.querySelector('.tabs_container');
@@ -293,6 +305,8 @@
 
   const SELECTED_CLASSNAME = 'is_selected';
   const ITEMS_PER_LOAD = 7;
+
+  const tabCache = {};
 
   // Tab 기능 -----
   let selectedIndex = getSelectedIndex();
@@ -320,6 +334,15 @@
 
     viewMoreLoadCount = 1;
 
+    // tab cache 저장
+    const cacheKey = clickedTabType;
+
+    if (tabCache[cacheKey]) {
+      // console.log('Use cached data:', cacheKey);
+      renderListItems(tabCache[cacheKey]);
+      return;
+    }
+
     try {
       // 탭 클릭시 탭에 맞는 place type으로 주변 장소 검색하는 함수 호출
       const nearbyPlaces = await getNearbyPlaces(placeData, clickedTabType);
@@ -333,9 +356,12 @@
       }));
       // console.log('tab clicked merged data', mergedData);
 
+      tabCache[cacheKey] = mergedData;
+
       renderListItems(mergedData);
     } catch (error) {
-      console.error('장소 불러오기 실패:', error);
+      console.error('Error in getting tab data:', error);
+      throw error;
     }
   });
 
