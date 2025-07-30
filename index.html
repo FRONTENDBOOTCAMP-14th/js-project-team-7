@@ -5,28 +5,215 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="Description" content="Go7! 여행 추천지 검색 웹사이트 입니다." />
     <title>Go7</title>
-    <link rel="icon" href="/images/favicon.ico" />
+    <link rel="icon" href="/public/images/favicon.ico" />
+    <link rel="stylesheet" href="/src/pages/index/style.css" />
     <script type="module" src="/src/main.js"></script>
-    <style>
-      a {
-        font-size: 42px;
-        display: block;
-      }
-    </style>
+    <script type="module" src="/src/pages/index/script.js"></script>
   </head>
   <body>
-    <a href="/src/components/footer/index.html">푸터</a>
-    <a href="/src/components/header/index.html">헤더</a>
-    <a href="/src/components/index-carousel/index.html">인덱스 캐러셀</a>
-    <a href="/src/components/landmark-list-item/index.html">랜드마크 리스트</a>
-    <a href="/src/components/photocard/index.html">포토카드</a>
-    <a href="/src/components/recommended-place-list-item/index.html">랜드마크탭페이지</a>
-    <a href="/src/components/search-bar/search-bar.html">검색바</a>
-    <a href="/src/components/search-list/search-list.html">검색결과 리스트</a>
-    <a href="/src/components/tab/index.html">탭 컴포넌트</a>
-    <a href="/src/components/view-carousel/view-carousel.html">뷰 캐러셀</a>
-    <a href="/src/components/view-more-button/index.html">더보기버튼</a>
-    <a href="/src/components/view-nav-button/view-nav-button.html">홈으로,뒤로가기버튼</a>
-    <a href="">테스트</a>
+    <div class="sub_body">
+      <header class="header_logo_container">
+        <!-- 동심원들 -->
+        <div class="circle circle_1"></div>
+        <div class="circle circle_2"></div>
+        <div class="circle circle_3"></div>
+        <div class="circle circle_4"></div>
+        <!-- 로고 텍스트 -->
+        <div class="header_logo_text">Go7</div>
+      </header>
+      <div class="page_container">
+        <div class="search_container">
+          <div class="search_bar">
+            <input type="text" class="search_input" id="search_input" placeholder="떠나고 싶은 곳은?" autocomplete="off" />
+            <button class="search_button" id="search_button"><img src="/src/assets/search.svg" alt="search" /></button>
+          </div>
+          <ul class="suggestions" id="suggestions"></ul>
+        </div>
+        <!-- 첫 번째 섹션: 무더운 여름, 시원한 여행지 -->
+        <div class="section_header">
+          <h2 class="section_title"># 무더운 여름, 시원한 여행지</h2>
+          <div class="section_controls">
+            <button class="carousel_nav_button prev_button">
+              <img src="/public/images/next-button.svg" alt="이전" />
+            </button>
+            <button class="carousel_nav_button next_button">
+              <img src="/public/images/next-button.svg" alt="다음" />
+            </button>
+          </div>
+        </div>
+        <section class="destinations summer">
+          <div class="carousel_container">
+            <div class="carousel_track">
+              <!-- 카드 1 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+
+              <!-- 카드 2 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+              <!-- 카드 3 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+              <!-- 카드 4 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 두 번째 섹션: 다가올 가을을 위한 추천 여행지 -->
+        <div class="section_header">
+          <h2 class="section_title"># 다가올 가을을 대비할 추천 여행지!</h2>
+          <div class="section_controls">
+            <button class="carousel_nav_button prev_button">
+              <img src="/public/images/next-button.svg" alt="이전" />
+            </button>
+            <button class="carousel_nav_button next_button">
+              <img src="/public/images/next-button.svg" alt="다음" />
+            </button>
+          </div>
+        </div>
+        <section class="destinations autumn">
+          <div class="carousel_container">
+            <div class="carousel_track">
+              <!-- 카드 1 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+
+              <!-- 카드 2 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+              <!-- 카드 3 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+              <!-- 카드 4 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 세 번째 섹션: HOT 여행지 -->
+        <div class="section_header">
+          <h2 class="section_title"># HOT🔥 여행지</h2>
+          <div class="section_controls">
+            <button class="carousel_nav_button prev_button">
+              <img src="/public/images/next-button.svg" alt="이전" />
+            </button>
+            <button class="carousel_nav_button next_button">
+              <img src="/public/images/next-button.svg" alt="다음" />
+            </button>
+          </div>
+        </div>
+        <section class="destinations hot">
+          <div class="carousel_container">
+            <div class="carousel_track">
+              <!-- 카드 1 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+
+              <!-- 카드 2 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+              <!-- 카드 3 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+              <!-- 카드 4 -->
+              <a href="#" class="destination_card">
+                <div class="card_image">
+                  <img src="/public/images/travel-card-image.svg" alt="알래스카" />
+                </div>
+                <div class="card_content">
+                  <h3 class="card_title">알래스카</h3>
+                  <p class="card_subtitle">19개의 랜드마크</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer class="footer">
+        <div class="footer_container">
+          <p class="footer_text">© 2025 Go7. All rights reserved</p>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>

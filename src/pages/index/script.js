@@ -120,7 +120,7 @@ function createCityInfo(city, data) {
 /**
  * 도시 데이터 가져오기 (Wikipedia API 사용)
  */
-export async function getCityData(cities) {
+async function getCityData(cities) {
   const results = [];
   const LANDMARK_COUNT = 20; // 랜드마크 개수 상수
   const API_DELAY = 200; // API 요청 간 지연 시간 (ms)
@@ -361,21 +361,27 @@ document.addEventListener('DOMContentLoaded', async function () {
   // 모든 섹션 동시 초기화
   await Promise.all(initPromises);
 
-  // 검색 기능 초기화
-  initSearchFeature();
+  // 검색 기능 초기화 (비동기)
+  await initSearchFeature();
 });
 
 /**
  * 검색 기능 초기화 - search-bar 폴더에서 가져온 원본 코드
  */
-function initSearchFeature() {
+async function initSearchFeature() {
+  console.log('검색 기능 초기화 시작');
   const searchState = createSearchState();
 
-  initializeCountriesAndCities(searchState);
+  // 국가와 도시 데이터를 먼저 로드
+  await initializeCountriesAndCities(searchState);
+  
   const searchElements = getSearchElements();
+  if (!searchElements) {
+    console.error('검색 요소를 찾을 수 없습니다.');
+    return;
+  }
 
-  if (!searchElements) return;
-
+  console.log('검색 데이터 로드 완료, 이벤트 리스너 설정');
   setupSearchEventListeners(searchState, searchElements);
 }
 
@@ -395,6 +401,7 @@ function createSearchState() {
  * 국가와 도시 데이터 초기화
  */
 async function initializeCountriesAndCities(searchState) {
+  console.log('국가와 도시 데이터 로딩 시작');
   try {
     const response = await fetch('https://countriesnow.space/api/v0.1/countries');
     if (!response.ok) {
@@ -403,6 +410,10 @@ async function initializeCountriesAndCities(searchState) {
 
     const { data } = await response.json();
     populateSearchData(data, searchState);
+    console.log('데이터 로딩 완료:', {
+      countries: searchState.countries.size,
+      cities: searchState.cities.size
+    });
   } catch (error) {
     console.error('Error fetching countries and cities:', error);
   }
@@ -469,6 +480,7 @@ function setupSearchEventListeners(searchState, elements) {
 function handleSearchInput(searchState, elements) {
   const { searchInput, suggestionsBox, searchButton } = elements;
   const query = searchInput.value.toLowerCase();
+  console.log('검색 입력:', query);
 
   suggestionsBox.innerHTML = '';
   searchState.selectedIndex = -1;
@@ -477,6 +489,7 @@ function handleSearchInput(searchState, elements) {
 
   if (query) {
     const suggestions = getFilteredSuggestions(query, searchState);
+    console.log('검색 제안:', suggestions);
     if (suggestions.length > 0) {
       renderSuggestions(suggestions, searchState, elements);
       showSuggestions(suggestionsBox);
