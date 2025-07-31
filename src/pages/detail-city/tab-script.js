@@ -132,7 +132,7 @@ import defaultImage from '../../assets/travel-card-image.svg';
 
   // 검색된 장소의 근처 places들 찾기
   async function getNearbyPlaces(placeDataParam, tabDataType, radius = 8000) {
-    const url = 'https://google-map-places-new-v2.p.rapidapi.com/v1/places:searchNearby';
+    const url = 'https://google-map-places-new-v2.p.rapidapi.com/v1/places:searchNearby?languageCode=en';
 
     const { location } = placeDataParam;
     // console.log('getNearbyPlaces placeDataParam', placeDataParam);
