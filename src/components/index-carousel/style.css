@@ -67,14 +67,24 @@
     .carousel_track {
       display: flex;
       gap: 15px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      
+      /* 각 리스트 아이템 */
+      li {
+        flex-shrink: 0;
+      }
+      
       /* 각 여행지 카드 */
       .destination_card {
         width: 220px;
         height: 218px;
-        flex-shrink: 0;
+        display: block;
         background: white;
         border-radius: var(--rounded_md);
         box-shadow: var(--shadow_base);
+        text-decoration: none;
         /* 여행지 이미지 */
         .card_image {
           width: 100%;
