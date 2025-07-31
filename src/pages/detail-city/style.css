@@ -15,20 +15,28 @@
   margin-block-end: 20px;
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .landmark_list_item_container {
   display: flex;
   flex-flow: column nowrap;
   gap: 20px;
 }
 
-.tabs_container{
+.tabs_container {
   margin-bottom: 70px;
 
   .view_more_button_container {
     margin-top: 30px;
   }
 }
-
 
 .view_nav_btn {
   position: relative;
