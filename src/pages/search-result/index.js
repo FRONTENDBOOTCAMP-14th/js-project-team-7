@@ -45,7 +45,7 @@ export async function renderSearchResults(items) {
   }
 
   searchList.innerHTML = '';
-  searchListTitle.textContent = `총 ${items.length}개의 도시 검색 결과`;
+  searchListTitle.textContent = `${items.length} city search results found`;
 
   await fetchMoreData();
 
