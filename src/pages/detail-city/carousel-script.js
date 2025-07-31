@@ -65,7 +65,8 @@ function renderWeatherInfo(weather) {
 }
 
 function getDetailInfo(keyword) {
-  return fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${keyword}`)
+  const conversionKeyword = keyword.replace(/-.*$/, '');
+  return fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${conversionKeyword}`)
     .then((res) => {
       if (!res.ok) throw new Error('res 오류');
       return res.json();
@@ -83,7 +84,8 @@ function getDetailInfo(keyword) {
 }
 
 function getDetailImages(keyword) {
-  return fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=images&titles=${keyword}`)
+  const conversionKeyword = keyword.replace(/-.*$/, '');
+  return fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=images&titles=${conversionKeyword}`)
     .then((res) => {
       if (!res.ok) throw new Error('이미지 목록 요청 실패');
       return res.json();
