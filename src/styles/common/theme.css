@@ -29,4 +29,8 @@
 
   /* box-shadow */
   --shadow_base: 0px 4px 6px 0 rgba(0, 0, 0, 0.1);
+
+  /* layout */
+  --web_max_witdh: 420px;
+  --web_page_spacing: 24px;
 }

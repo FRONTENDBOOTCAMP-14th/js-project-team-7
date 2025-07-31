@@ -1,20 +1,18 @@
 .footer {
-  background-color: #f4f4f4;
   width: 100%;
-  height: 48px;
 
   .footer_container {
     width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--color_light_gray);
+    padding: 20px 0;
 
     .footer_text {
       font-family: pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
       font-size: var(--font_base);
       font-weight: lighter;
-      color: var(--color_gray);
       text-align: center;
     }
   }

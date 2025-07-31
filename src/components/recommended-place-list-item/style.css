@@ -20,7 +20,7 @@
   box-shadow: var(--shadow_base);
   background: white;
 
-  transition: all 0.3s ease;
+  transition: transform 0.4s ease, padding 0.4s ease;
 }
 
 .photo_container {
@@ -29,10 +29,11 @@
   height: var(--photo_size);
   overflow: hidden;
   border-radius: var(--rounded_md);
+  flex-shrink: 0;
 
   display: flex;
   flex-flow: row nowrap;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 
   .photo {
     width: 100%;
@@ -44,16 +45,14 @@
 }
 
 .accordion_item_contents {
-  margin-inline-start: 13px;
-  margin-inline-end: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width:100%;
+  padding-inline: 15px;
 
   .landmark_name_button {
     text-align: left;
-    margin-block-end: 0;
-    transition: margin 0.3s ease;
   }
 
   .landmark_name {
@@ -66,8 +65,7 @@
     color: var(--color_gray);
     opacity: 0;
     max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    transition: max-height .4s, margin .4s, opacity .4s;
   }
 }
 
@@ -76,6 +74,7 @@
   flex-flow: row nowrap;
   align-items: center;
   gap: 3px;
+  flex-shrink: 0;
 
   .star_symbol {
     position: relative;
@@ -99,7 +98,7 @@
   right: 12px;
   opacity: 0;
   transform: scale(0);
-  transition: all 0.3s ease;
+  transition: opacity 0.8s ease;
 
   a {
     width: 100%;
@@ -113,7 +112,7 @@
 
 /* is_opened 상태 스타일 */
 .accordion.is_opened {
-  padding: 12px;
+  padding: 10px;
 }
 
 .accordion.is_opened .photo_container {
@@ -121,24 +120,27 @@
 }
 
 .accordion.is_opened .accordion_item_contents {
-  margin-block: 10px;
   justify-content: flex-start;
-
-  .landmark_name_button {
-    margin-block-end: 7px;
-  }
 
   .landmark_address,
   .landmark_hours {
     opacity: 1;
+  }
+
+  .landmark_address {
+    line-height: 1.2;
+    max-height: calc(100% - 20px);
+    margin: 5px 0;
+  }
+
+  .landmark_hours {
     max-height: 20px;
-    margin-block-end: 2px;
   }
 }
 
 .accordion.is_opened .stars {
-  align-self: flex-start;
-  margin-block-start: 12px;
+  align-items: flex-start;
+  padding-top: 2px;
 
   .star_score {
     padding-inline-end: 8px;

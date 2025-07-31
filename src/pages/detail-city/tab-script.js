@@ -8,7 +8,7 @@ import defaultImage from '../../assets/travel-card-image.svg';
   const INITIAL_TAB = 'tourist_attraction';
 
   // 테스트용
-  // const placeId = 'ChIJj61dQgK6j4AR4GeTYWZsKWw';
+  // const placeId = 'ChIJzzlcLQGifDURm_JbQKHsEX4';
 
   let placeData;
 
@@ -36,8 +36,8 @@ import defaultImage from '../../assets/travel-card-image.svg';
         const result = await response.json();
 
         if (result) {
-          console.log(result.photoUri);
-          console.log(DEFAULT_IMAGE);
+          // console.log(result.photoUri);
+          // console.log(DEFAULT_IMAGE);
           return { ...place, photoUrl: result.photoUri };
         } else {
           return { ...place, photoUrl: DEFAULT_IMAGE };
@@ -105,8 +105,7 @@ import defaultImage from '../../assets/travel-card-image.svg';
     if (cityName) {
       placeId = await getSearchedPlaceId(cityName);
     } else {
-      // 기본값: 서울
-      placeId = 'ChIJzzlcLQGifDURm_JbQKHsEX4';
+      throw new Error(`No place ID found for city: "${cityName}". Check if the city name is valid.`);
     }
 
     const url = `https://google-map-places-new-v2.p.rapidapi.com/v1/places/${placeId}`;
@@ -133,7 +132,7 @@ import defaultImage from '../../assets/travel-card-image.svg';
 
   // 검색된 장소의 근처 places들 찾기
   async function getNearbyPlaces(placeDataParam, tabDataType, radius = 8000) {
-    const url = 'https://google-map-places-new-v2.p.rapidapi.com/v1/places:searchNearby';
+    const url = 'https://google-map-places-new-v2.p.rapidapi.com/v1/places:searchNearby?languageCode=en';
 
     const { location } = placeDataParam;
     // console.log('getNearbyPlaces placeDataParam', placeDataParam);
@@ -188,7 +187,7 @@ import defaultImage from '../../assets/travel-card-image.svg';
 
   // 장소들 영업시간 구하기
   function getHours(sortedData) {
-    const hoursPromises = sortedData.map((place) => {
+    return sortedData.map((place) => {
       const hours = place.currentOpeningHours;
       if (!hours) return '';
 
@@ -203,8 +202,6 @@ import defaultImage from '../../assets/travel-card-image.svg';
 
       return placeHours;
     });
-
-    return Promise.all(hoursPromises);
   }
 
   // 추려낸 리스트 아이템 render
@@ -348,7 +345,8 @@ import defaultImage from '../../assets/travel-card-image.svg';
       const nearbyPlaces = await getNearbyPlaces(placeData, clickedTabType);
       // console.log('nearbyPlaces in tab click', nearbyPlaces);
 
-      const [sortedPlacesWithPhotos, hoursArray] = await Promise.all([getPhotos(nearbyPlaces), getHours(nearbyPlaces)]);
+      const sortedPlacesWithPhotos = await getPhotos(nearbyPlaces);
+      const hoursArray = getHours(nearbyPlaces);
 
       const mergedData = sortedPlacesWithPhotos.map((place, idx) => ({
         ...place,
