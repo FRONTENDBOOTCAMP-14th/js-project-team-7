@@ -23,6 +23,7 @@ export async function getCityData(cities, option) {
 
   const fetchCityData = async (city) => {
     return limit(async () => {
+      await delay(CONFIG.API_DELAY_MS);
       try {
         const url = new URL(urlBase);
         url.search = new URLSearchParams({
@@ -30,12 +31,12 @@ export async function getCityData(cities, option) {
           language: 'ko',
         }).toString();
 
+        console.log(url);
+
         const response = await fetch(url, {
-          method: 'GET',
+          method: 'POST',
           headers,
         });
-
-        await delay(CONFIG.API_DELAY_MS);
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);

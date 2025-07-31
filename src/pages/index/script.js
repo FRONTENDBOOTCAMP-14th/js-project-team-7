@@ -366,7 +366,7 @@ async function initSearchFeature() {
 
   // 국가와 도시 데이터를 먼저 로드
   await initializeCountriesAndCities(searchState);
-  
+
   const searchElements = getSearchElements();
   if (!searchElements) {
     return;
@@ -635,12 +635,12 @@ function handleSearchExecution(searchState, elements) {
 /**
  * 검색 결과 페이지로 이동
  */
-function navigateToSearchResult(matchedCountry, matchedCity, query, searchState) {
+function navigateToSearchResult(matchedCountry, matchedCity, query) {
   let url;
 
   if (matchedCountry) {
-    const matchedCities = searchState.countryCityMap[matchedCountry];
-    url = `/src/pages/search-result/index.html?cities=${encodeURIComponent(JSON.stringify(matchedCities))}`;
+    // 국가명만 전달하여 URL 길이 제한 문제 해결
+    url = `/src/pages/search-result/index.html?country=${encodeURIComponent(matchedCountry)}`;
   } else if (matchedCity) {
     url = `/src/pages/search-result/index.html?cities=${encodeURIComponent(JSON.stringify([matchedCity]))}`;
   } else {

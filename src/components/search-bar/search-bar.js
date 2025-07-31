@@ -1,10 +1,10 @@
 import { renderSearchResults } from '../../pages/search-result/index.js';
 
+export let countryCityMap = {};
 const countries = new Set();
 const cities = new Set();
-let countryCityMap = {};
 
-async function getAllCountriesAndCities() {
+export async function getAllCountriesAndCities(country) {
   try {
     const res = await fetch('https://countriesnow.space/api/v0.1/countries');
     if (!res.ok) {
@@ -21,6 +21,10 @@ async function getAllCountriesAndCities() {
     });
   } catch (error) {
     console.error('Error fetching countries and cities:', error);
+  }
+
+  if (countries) {
+    return countryCityMap[country];
   }
 }
 
@@ -61,8 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  function handleSearch() {
-    const query = searchInput.value.trim();
+  function handleSearch(country) {
+    const query = country ? country : searchInput.value.trim();
+    console.log(country, query);
     if (!query) return;
 
     hideSuggestions();
@@ -141,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedIndex = (selectedIndex - 1 + items.length) % items.length;
       updateSelection();
     } else if (event.key === 'Enter') {
+      console.log('enter');
       event.preventDefault();
       if (selectedIndex >= 0 && selectedIndex < items.length) {
         searchInput.value = items[selectedIndex].textContent;
