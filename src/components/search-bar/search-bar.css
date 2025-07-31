@@ -1,11 +1,12 @@
 .search_container {
   width: 100%;
+  max-width: 312px;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow_base);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: var(--rounded_lg);
   position: absolute;
-  top: -25px;
+  top: 336px;
   z-index: 10;
   background-color: #fff;
 }

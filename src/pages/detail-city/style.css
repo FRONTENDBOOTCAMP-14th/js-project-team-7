@@ -7,6 +7,30 @@
 @import url('/src/components/landmark-list-item/style.css');
 @import url('/src/components/view-more-button/style.css');
 
+body {
+  background-color: #f9f9f9;
+}
+
+.sub_body {
+  max-width: 420px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  background-color: #fff;
+  box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.01);
+}
+
+.page_container {
+  width: 100%;
+  padding: 0 24px;
+  margin: 0 auto;
+
+  .view_info_description {
+    margin-bottom: 30px;
+  }
+}
+
 .header_logo_container {
   height: 200px;
 }
@@ -21,14 +45,9 @@
   gap: 20px;
 }
 
-.tabs_container{
-  margin-bottom: 70px;
-
-  .view_more_button_container {
-    margin-top: 30px;
-  }
+.view_more_button_container {
+  margin: 30px 0 70px 0;
 }
-
 
 .view_nav_btn {
   position: relative;
