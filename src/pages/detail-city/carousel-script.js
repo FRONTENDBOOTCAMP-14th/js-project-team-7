@@ -8,20 +8,27 @@ function renderDetailCarouselView(cityName) {
   getDetailInfo(cityName);
   getDetailImages(cityName);
   renderGoogleMap(cityName);
+  renderTitleCity(cityName);
 }
 
-function renderTitle(description) {
+function renderTitleCountry(description) {
   const title = document.querySelector('.view_info_title .title');
   const span = title.querySelector('span');
-  const storng = title.querySelector('strong');
   const parts = description.split(',');
 
   span.textContent = parts[parts.length - 1];
-  storng.textContent = city;
+}
+
+function renderTitleCity(keyword) {
+  document.querySelector('.view_info_title .title strong').textContent = keyword;
 }
 
 function renderDescription(extract) {
   document.querySelector('.view_info_description').textContent = extract;
+}
+
+function renderDefaultDescription() {
+  document.querySelector('.view_info_description').textContent = 'There are no phrases to describe.';
 }
 
 function renderGoogleMap(keyword) {
@@ -66,20 +73,20 @@ function renderWeatherInfo(weather) {
 
 function getDetailInfo(keyword) {
   const conversionKeyword = keyword.replace(/-.*$/, '');
+  
   return fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${conversionKeyword}`)
     .then((res) => {
       if (!res.ok) throw new Error('res 오류');
       return res.json();
     })
     .then((data) => {
-      if (!data.description || !data.extract || !data.coordinates) throw new Error('도시 정보가 충분하지 않습니다.');
-
-      renderTitle(data.description);
+      renderTitleCountry(data.description);
       renderDescription(data.extract);
       getWeatherInfo(data.coordinates.lat, data.coordinates.lon);
     })
     .catch((err) => {
       console.error('wikipedia Detail Info :', err);
+      renderDefaultDescription();
     });
 }
 
@@ -105,6 +112,7 @@ function getDetailImages(keyword) {
     })
     .catch((err) => {
       console.error('Wikipedia 이미지 가져오기 실패:', err);
+      initCarousel();
     });
 }
 
@@ -177,13 +185,6 @@ function initCarousel() {
 
       if (viewCarouselCount <= 1) {
         viewCarousel.querySelector('.view_carousel_nav').style.display = 'none';
-
-        if (viewCarouselCount === 0) {
-          const noneImgText = document.createElement('span');
-          noneImgText.classList.add('none_img');
-          noneImgText.textContent = '아쉽게도 이미지가 없어요! 😅';
-          viewCarousel.insertAdjacentElement('afterbegin', noneImgText);
-        }
       } else {
         const viewCarouselStatus = viewCarousel.querySelector('.view_carousel_status');
 

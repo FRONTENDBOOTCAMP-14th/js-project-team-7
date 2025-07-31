@@ -85,6 +85,13 @@
     block-size: 100%;
     transition: translate 0.4s;
 
+    &:empty{
+      background-image: url('/images/default_thumbnail.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
     .view_carousel_item {
       flex-shrink: 0;
       inline-size: 100%;
