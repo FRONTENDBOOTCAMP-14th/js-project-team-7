@@ -7,31 +7,29 @@
 .hidden {
   display: none !important;
 }
+body {
+  min-height: 100vh;
+  position: relative;
+}
 
-.sub_body {
-  .page_container {
-    .search_container {
-      width: calc(100% - (var(--web_page_spacing) * 2));
-    }
-  }
-  .footer {
-    margin-top: auto;
-    .footer_container {
-      margin-top: 40px;
-    }
-  }
+.footer {
+  position: absolute;
+  bottom: 0;
 }
 
 .search_result_container {
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: auto;
-  margin-top: 75px;
+  margin-top: 70px;
+  padding: 0 24px;
+  padding-bottom: 80px;
 }
 
 .view_more_button_container {
   width: 100%;
-  margin: 30px 0 0;
+  margin: 20px 0;
 }
