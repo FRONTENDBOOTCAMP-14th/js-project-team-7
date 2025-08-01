@@ -35,12 +35,12 @@ function renderGoogleMap(keyword) {
   document.querySelector('.view_map').insertAdjacentHTML(
     'afterbegin',
     `<iframe
-      title="${keyword} 위치 지도"
+      title="${keyword} location map"
       width="100%" 
       height="100%"
       frameborder="0"
       style="border:0"
-      src="https://maps.google.com/maps?q=${keyword}&hl=ko&z=15&output=embed"
+      src="https://maps.google.com/maps?q=${keyword}&hl=en&z=15&output=embed"
       ></iframe>`
   );
 }
