@@ -11,8 +11,8 @@
 
 // 카테고리별 도시 목록
 const CITY_CATEGORIES = {
-  summer: ['Sapporo', 'Barcelona', 'Santorini', 'Vancouver', 'Prague'],
-  autumn: ['Seoul', 'Tokyo', 'New York City', 'Paris', 'Istanbul'],
+  summer: ['Sapporo', 'Barcelona', 'Florence', 'Vancouver', 'Prague'],
+  autumn: ['Seoul', 'Tokyo', 'New York City', 'Paris', 'Vienna'],
   hot: ['Dubai', 'Bangkok', 'Bali', 'Los Angeles', 'Da Nang'],
 };
 
@@ -43,7 +43,8 @@ async function getCityInfoFromWikipedia(city) {
 async function trySpecialSearchTerms(city) {
   const SEARCH_TERMS = {
     Bali: ['Ubud', 'Tanah Lot', 'Kuta Beach', 'Bali Indonesia'],
-    Santorini: ['Oia', 'Fira', 'Thira', 'Santorini Greece'],
+    Florence: ['Florence Italy', 'Firenze', 'Florence Tuscany'],
+    Vienna: ['Vienna Austria', 'Wien', 'Vienna city'],
   };
 
   const termsToTry = SEARCH_TERMS[city] || [city];
@@ -121,7 +122,6 @@ function createCityInfo(city, data) {
  */
 async function getCityData(cities) {
   const results = [];
-  const LANDMARK_COUNT = 20; // 랜드마크 개수 상수
   const API_DELAY = 200; // API 요청 간 지연 시간 (ms)
 
   for (const city of cities) {
@@ -129,8 +129,9 @@ async function getCityData(cities) {
       // Wikipedia에서 도시 정보 가져오기
       const cityInfo = await getCityInfoFromWikipedia(city);
 
-      // 랜드마크는 단순히 20개로 고정
-      const landmarks = Array.from({ length: LANDMARK_COUNT }, (_, i) => ({
+      // 프라하는 15개, 다른 도시는 20개 랜드마크
+      const landmarkCount = city === 'Prague' ? 15 : 20;
+      const landmarks = Array.from({ length: landmarkCount }, (_, i) => ({
         name: `${city} Landmark ${i + 1}`,
         type: 'attraction',
         rating: '4.5',
@@ -147,9 +148,10 @@ async function getCityData(cities) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
     } catch (error) {
       console.error(`Failed to fetch data for city ${city}:`, error);
+      const landmarkCount = city === 'Prague' ? 15 : 20;
       results.push({
         city,
-        results: Array.from({ length: LANDMARK_COUNT }, (_, i) => ({
+        results: Array.from({ length: landmarkCount }, (_, i) => ({
           name: `${city} Landmark ${i + 1}`,
           type: 'attraction',
           rating: '4.0',
