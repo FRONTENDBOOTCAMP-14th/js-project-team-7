@@ -4,14 +4,12 @@ import { getAllCountriesAndCities } from '../../components/search-bar/search-bar
 
 document.addEventListener('DOMContentLoaded', function () {
   (async () => {
-    console.log('search-result 페이지 로드됨');
     const urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.has('country')) {
       try {
         const country = urlParams.get('country');
         const countryData = await getAllCountriesAndCities(country);
-        console.log(countryData);
         renderSearchResults(countryData?.slice(0, 500));
       } catch (error) {
         console.error('국가 파라미터 파싱 오류:', error);
@@ -32,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 export async function renderSearchResults(items) {
-  console.log(items);
   const searchList = document.getElementById('search_list');
   const viewMoreButton = document.getElementById('view_more_button');
   const searchListTitle = document.getElementById('search_list_title');
