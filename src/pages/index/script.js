@@ -43,8 +43,8 @@ async function getCityInfoFromWikipedia(city) {
 async function trySpecialSearchTerms(city) {
   const SEARCH_TERMS = {
     Bali: ['Ubud', 'Tanah Lot', 'Kuta Beach', 'Bali Indonesia'],
-    Florence: ['Florence Italy', 'Firenze', 'Florence Tuscany'],
-    Vienna: ['Vienna Austria', 'Wien', 'Vienna city'],
+    Florence: ['Florence', 'Firenze', 'Florence, Italy'],
+    Vienna: ['Vienna', 'Wien', 'Vienna, Austria'],
   };
 
   const termsToTry = SEARCH_TERMS[city] || [city];
