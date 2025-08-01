@@ -34,7 +34,7 @@ export async function getCityData(cities, option) {
         console.log(url);
 
         const response = await fetch(url, {
-          method: 'POST',
+          method: 'GET',
           headers,
         });
 

@@ -4,5 +4,5 @@ export const CONFIG = {
   DETAIL_PATH: '/src/pages/detail-city/index.html',
   ITEMS_PER_LOAD: 10,
   API_DELAY_MS: 200,
-  DEFAULT_IMAGE: '/src/assets/travel-card-image.svg',
+  DEFAULT_IMAGE: '/images/default_thumbnail.png',
 };
