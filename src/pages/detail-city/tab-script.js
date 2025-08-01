@@ -139,7 +139,6 @@ import pLimit from 'p-limit';
       const response = await fetch(url, options);
       placeData = await response.json();
 
-      console.log(placeData);
       // console.log('getPlaceData placeData', placeData);
       return placeData;
     } catch (error) {
@@ -187,7 +186,6 @@ import pLimit from 'p-limit';
       const response = await fetch(url, options);
       result = await response.json();
 
-      console.log(result);
       // console.log('nearby places', result);
     } catch (error) {
       console.error('Error in getting nearby places:', error);
