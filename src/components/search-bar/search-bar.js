@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const matchedCity = cityArray.find((c) => c.toLowerCase() === lowerQuery);
 
     if (matchedCountry) {
-      renderSearchResults(countryCityMap[matchedCountry]?.slice(0, 500));
+      renderSearchResults(countryCityMap[matchedCountry]);
     } else if (matchedCity) {
       renderSearchResults([matchedCity]);
     } else {

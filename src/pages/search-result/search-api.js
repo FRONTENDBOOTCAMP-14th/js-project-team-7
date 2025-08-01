@@ -31,8 +31,6 @@ export async function getCityData(cities, option) {
           language: 'ko',
         }).toString();
 
-        console.log(url);
-
         const response = await fetch(url, {
           method: 'GET',
           headers,
@@ -43,8 +41,7 @@ export async function getCityData(cities, option) {
         }
 
         const data = await response.json();
-        console.log(`Fetched data for ${city}:`, data);
-
+        console.log(data);
         return {
           city,
           results: data.results || [],

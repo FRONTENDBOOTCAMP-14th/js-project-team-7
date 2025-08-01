@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
       try {
         const country = urlParams.get('country');
         const countryData = await getAllCountriesAndCities(country);
-        renderSearchResults(countryData?.slice(0, 500));
+        renderSearchResults(countryData);
       } catch (error) {
         console.error('국가 파라미터 파싱 오류:', error);
       }
