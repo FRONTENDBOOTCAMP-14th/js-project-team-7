@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function handleSearch(country) {
     const query = country ? country : searchInput.value.trim();
-    console.log(country, query);
     if (!query) return;
 
     hideSuggestions();
@@ -146,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedIndex = (selectedIndex - 1 + items.length) % items.length;
       updateSelection();
     } else if (event.key === 'Enter') {
-      console.log('enter');
       event.preventDefault();
       if (selectedIndex >= 0 && selectedIndex < items.length) {
         searchInput.value = items[selectedIndex].textContent;
