@@ -1,22 +1,23 @@
 .view_info_container {
   display: flex;
   flex-flow: column nowrap;
-  gap: 10px;
+  gap: 12px;
 
   .view_info_title {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     align-items: center;
 
     .title {
       font-weight: 300;
       display: flex;
       flex-flow: column wrap;
-      gap: 1px;
+      gap: 5px;
 
       span {
         font-size: var(--font_base);
         color: var(--color_gray);
+        line-height: 1.15;
       }
       strong {
         font-size: var(--font_2xl);
