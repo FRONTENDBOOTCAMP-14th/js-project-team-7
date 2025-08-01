@@ -11,10 +11,12 @@ body {
   background-color: #fff;
   box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.01);
 
-  .header_logo_text{
-    font-size: 0;
-    svg{
-      width: 60px;
+  .header_logo_container{
+    .header_logo_text{
+      font-size: 0;
+      svg{
+        width: 60px;
+      }
     }
   }
 }

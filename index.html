@@ -6,18 +6,183 @@
     <meta name="Description" content="Go7! Travel recommendation search website." />
     <title>Go7</title>
     <link rel="icon" href="/public/images/favicon.svg" />
-    <link rel="stylesheet" href="/src/pages/index/style.css" />
-    <script type="module" src="/src/main.js"></script>
-    <script type="module" src="/src/pages/index/script.js"></script>
+    <link rel="stylesheet" href="/src/main.js" />
+<link rel="stylesheet" href="/src/style.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, var(--color_blue) 0%, var(--color_light_blue) 100%);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .splash_container {
+        text-align: center;
+        position: relative;
+        animation: fadeInUp 1.5s ease-out;
+      }
+
+      .header_logo_container {
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        animation: logoFloat 3s ease-in-out infinite;
+      }
+
+      .header_logo_container:hover {
+        transform: scale(1.05);
+      }
+
+      /* 동심원 */
+      .circle {
+        position: absolute;
+        border-radius: var(--rounded_circle);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .circle_1 {
+        width: 350px;
+        height: 350px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .circle_2 {
+        width: 300px;
+        height: 300px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .circle_3 {
+        width: 240px;
+        height: 240px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .circle_4 {
+        width: 170px;
+        height: 170px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .header_logo_text {
+        position: relative;
+        z-index: 10;
+        margin: 60px 0 160px 0;
+      }
+
+      .welcome_text {
+        color: white;
+        font-size: 24px;
+        font-weight: 300;
+        margin-bottom: 10px;
+        margin-top: 80px;
+        opacity: 0;
+        animation: fadeIn 2s ease-out 1s forwards;
+      }
+
+      .subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 16px;
+        font-weight: 300;
+        opacity: 0;
+        animation: fadeIn 2s ease-out 1.5s forwards;
+      }
+
+      .click_indicator {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeIn 2s ease-out 2s forwards, pulse 2s ease-in-out 3s infinite;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes logoFloat {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+
+      /* 모바일 반응형 */
+      @media (max-width: 768px) {
+        .circle_1 { width: 262.5px; height: 262.5px; }
+        .circle_2 { width: 225px; height: 225px; }
+        .circle_3 { width: 180px; height: 180px; }
+        .circle_4 { width: 127.5px; height: 127.5px; }
+        
+        .header_logo_text svg {
+          width: 100px;
+          height: auto;
+        }
+        
+        .welcome_text {
+          font-size: 20px;
+        }
+        
+        .subtitle {
+          font-size: 14px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="sub_body">
-      <header class="header_logo_container">
+    <div class="splash_container">
+      <div class="header_logo_container" onclick="window.location.href='/src/pages/index/index.html'">
         <!-- 동심원들 -->
         <div class="circle circle_1"></div>
         <div class="circle circle_2"></div>
         <div class="circle circle_3"></div>
         <div class="circle circle_4"></div>
+        
         <!-- 로고 텍스트 -->
         <div class="header_logo_text">
           <svg width="139" height="75" viewBox="0 0 139 75" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,224 +191,11 @@
             <path d="M87.0103 16.0894L88.229 1.43945L138.082 5.58654L123.435 69.7467L105.656 68.2678L117.661 18.6392L87.0103 16.0894Z" fill="white"/>
           </svg>
         </div>
-      </header>
-      <div class="page_container">
-        <div class="search_container">
-          <div class="search_bar">
-            <input type="text" class="search_input" id="search_input" placeholder="Where do you want to go?" autocomplete="off" />
-            <button class="search_button" id="search_button"><img src="/src/assets/search.svg" alt="search" /></button>
-          </div>
-          <ul class="suggestions" id="suggestions"></ul>
-        </div>
-        <!-- 첫 번째 섹션: 무더운 여름, 시원한 여행지 -->
-        <div class="section_header">
-          <h2 class="section_title"># Cool Destinations for Hot Summer</h2>
-          <div class="section_controls">
-            <button class="carousel_nav_button prev_button">
-              <img src="/public/images/next-button.svg" alt="Previous" />
-            </button>
-            <button class="carousel_nav_button next_button">
-              <img src="/public/images/next-button.svg" alt="Next" />
-            </button>
-          </div>
-        </div>
-        <section class="destinations summer">
-          <div class="carousel_container">
-            <ul class="carousel_track">
-              <!-- 카드 1 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-
-              <!-- 카드 2 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-              <!-- 카드 3 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-              <!-- 카드 4 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <!-- 두 번째 섹션: 다가올 가을을 위한 추천 여행지 -->
-        <div class="section_header">
-          <h2 class="section_title"># For Upcoming Autumn</h2>
-          <div class="section_controls">
-            <button class="carousel_nav_button prev_button">
-              <img src="/public/images/next-button.svg" alt="Previous" />
-            </button>
-            <button class="carousel_nav_button next_button">
-              <img src="/public/images/next-button.svg" alt="Next" />
-            </button>
-          </div>
-        </div>
-        <section class="destinations autumn">
-          <div class="carousel_container">
-            <ul class="carousel_track">
-              <!-- 카드 1 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-
-              <!-- 카드 2 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-              <!-- 카드 3 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-              <!-- 카드 4 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <!-- 세 번째 섹션: HOT 여행지 -->
-        <div class="section_header">
-          <h2 class="section_title"># HOT🔥 Cities</h2>
-          <div class="section_controls">
-            <button class="carousel_nav_button prev_button">
-              <img src="/public/images/next-button.svg" alt="Previous" />
-            </button>
-            <button class="carousel_nav_button next_button">
-              <img src="/public/images/next-button.svg" alt="Next" />
-            </button>
-          </div>
-        </div>
-        <section class="destinations hot">
-          <div class="carousel_container">
-            <ul class="carousel_track">
-              <!-- 카드 1 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-
-              <!-- 카드 2 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-              <!-- 카드 3 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-              <!-- 카드 4 -->
-              <li>
-                <a href="#" class="destination_card">
-                  <div class="card_image">
-                    <img src="/public/images/default_thumbnail.png" alt="Alaska" />
-                  </div>
-                  <div class="card_content">
-                    <h3 class="card_title">Alaska</h3>
-                    <p class="card_subtitle">19 landmarks</p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </section>
       </div>
-      <footer class="footer">
-        <div class="footer_container">
-          <p class="footer_text">© 2025 Go7. All rights reserved</p>
-        </div>
-      </footer>
+      
+      <div class="welcome_text">Welcome to Go7</div>
+      <div class="subtitle">Your Smart Travel Companion</div>
+      <div class="click_indicator">Click the logo to start exploring</div>
     </div>
   </body>
 </html>
