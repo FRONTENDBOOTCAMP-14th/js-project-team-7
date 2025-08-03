@@ -10,9 +10,6 @@ import pLimit from 'p-limit';
 
   const limit = pLimit(2);
 
-  // 테스트용
-  // const placeId = 'ChIJzzlcLQGifDURm_JbQKHsEX4';
-
   let placeData;
 
   function delayAPICalls(time) {
@@ -70,9 +67,6 @@ import pLimit from 'p-limit';
   // 검색 키워드 찾기
   const urlParams = new URLSearchParams(window.location.search);
   const city = urlParams.get('city');
-
-  // 테스트용
-  // const testCity = 'seoul';
 
   // 검색 된 도시 placeId 구하기
   async function getSearchedPlaceId(cityName) {
@@ -173,9 +167,7 @@ import pLimit from 'p-limit';
           },
         },
         includedTypes: [tabDataType],
-        // 테스트용
-        maxResultCount: 8,
-        // maxResultCount: 20,
+        maxResultCount: 20,
         rankPreference: 'POPULARITY',
       }),
     };
