@@ -1,0 +1,56 @@
+:root {
+  --photo_sm_size: 50px;
+  --photo_md_size: 88px;
+  --photo_lg_size: 100px;
+}
+
+.photo_container {
+  --photo_size: var(--photo_md_size);
+  width: var(--photo_size);
+  height: var(--photo_size);
+  overflow: hidden;
+  border-radius: var(--rounded_md);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.landmark_list_item_wrapper {
+  --photo_size: var(--photo_md_size);
+  display: grid;
+  grid-template-columns: var(--photo_size) auto;
+
+  width: 312px;
+  color: var(--color_black);
+  border-radius: var(--rounded_md);
+  box-shadow: var(--shadow_base);
+
+  .landmark_list_item_contents {
+    padding-inline: 13px;
+
+    .landmark_link {
+      color: var(--color_black);
+    }
+
+    .landmark_name {
+      font-size: var(--font_xl);
+      font-weight: 300;
+      padding-block: 10px 6px;
+    }
+
+    .landmark_description {
+      font-size: var(--font_base);
+      color: var(--color_gray);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

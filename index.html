@@ -1,15 +1,201 @@
 <!DOCTYPE html>
-<html lang="ko-KR">
+<html lang="en-US">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="Keywords" content="7대륙 - 여행 추천" />
-    <meta name="Description" content="7대륙의 여행 추천지 검색 웹사이트 입니다." />
-    <title>7대륙 - 여행 추천</title>
-    <link rel="icon" href="/images/favicon.ico" />
-		<script type="module" src="/src/main.js"></script>
+    <meta name="Description" content="Go7! Travel recommendation search website." />
+    <title>Go7</title>
+    <link rel="icon" href="/public/images/favicon.svg" />
+    <link rel="stylesheet" href="/src/main.js" />
+<link rel="stylesheet" href="/src/style.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, var(--color_blue) 0%, var(--color_light_blue) 100%);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .splash_container {
+        text-align: center;
+        position: relative;
+        animation: fadeInUp 1.5s ease-out;
+      }
+
+      .header_logo_container {
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        animation: logoFloat 3s ease-in-out infinite;
+      }
+
+      .header_logo_container:hover {
+        transform: scale(1.05);
+      }
+
+      /* 동심원 */
+      .circle {
+        position: absolute;
+        border-radius: var(--rounded_circle);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .circle_1 {
+        width: 350px;
+        height: 350px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .circle_2 {
+        width: 300px;
+        height: 300px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .circle_3 {
+        width: 240px;
+        height: 240px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .circle_4 {
+        width: 170px;
+        height: 170px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .header_logo_text {
+        position: relative;
+        z-index: 10;
+        margin: 60px 0 160px 0;
+      }
+
+      .welcome_text {
+        color: white;
+        font-size: 24px;
+        font-weight: 300;
+        margin-bottom: 10px;
+        margin-top: 80px;
+        opacity: 0;
+        animation: fadeIn 2s ease-out 1s forwards;
+      }
+
+      .subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 16px;
+        font-weight: 300;
+        opacity: 0;
+        animation: fadeIn 2s ease-out 1.5s forwards;
+      }
+
+      .click_indicator {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeIn 2s ease-out 2s forwards, pulse 2s ease-in-out 3s infinite;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes logoFloat {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+
+      /* 모바일 반응형 */
+      @media (max-width: 768px) {
+        .circle_1 { width: 262.5px; height: 262.5px; }
+        .circle_2 { width: 225px; height: 225px; }
+        .circle_3 { width: 180px; height: 180px; }
+        .circle_4 { width: 127.5px; height: 127.5px; }
+        
+        .header_logo_text svg {
+          width: 100px;
+          height: auto;
+        }
+        
+        .welcome_text {
+          font-size: 20px;
+        }
+        
+        .subtitle {
+          font-size: 14px;
+        }
+      }
+    </style>
   </head>
   <body>
-		<h1 style="font-size: 200px;">테스트 문구</h1>
+    <div class="splash_container">
+      <div class="header_logo_container" onclick="window.location.href='/src/pages/index/index.html'">
+        <!-- 동심원들 -->
+        <div class="circle circle_1"></div>
+        <div class="circle circle_2"></div>
+        <div class="circle circle_3"></div>
+        <div class="circle circle_4"></div>
+        
+        <!-- 로고 텍스트 -->
+        <div class="header_logo_text">
+          <svg width="139" height="75" viewBox="0 0 139 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M84.1741 34.4659C87.2421 35.1343 89.824 36.1898 91.9199 37.6324C94.0506 39.0826 95.7045 40.7941 96.8815 42.7669C98.0585 44.7397 98.7912 46.9078 99.0797 49.2713C99.403 51.6423 99.2912 54.083 98.7444 56.5931C98.1975 59.1033 97.2839 61.3692 96.0035 63.3909C94.758 65.4201 93.1897 67.087 91.2988 68.3913C89.4078 69.6957 87.1918 70.5641 84.6509 70.9965C82.1449 71.4365 79.3579 71.3223 76.2899 70.6539C73.2219 69.9855 70.6226 68.9261 68.4918 67.4759C66.3959 66.0333 64.7595 64.3256 63.5825 62.3529C62.4055 60.3801 61.6554 58.2082 61.332 55.8371C61.0436 53.4736 61.1728 51.0368 61.7196 48.5266C62.2665 46.0165 63.1627 43.7468 64.4082 41.7175C65.6886 39.6958 67.2743 38.0328 69.1653 36.7284C71.0562 35.424 73.2547 34.5519 75.7608 34.1119C78.3017 33.6795 81.1061 33.7975 84.1741 34.4659ZM78.3863 61.0316C79.5368 61.2823 80.5623 61.2683 81.4629 60.9898C82.406 60.684 83.2225 60.2046 83.9126 59.5515C84.6102 58.8636 85.1912 58.0407 85.6555 57.0829C86.1198 56.125 86.4735 55.0883 86.7166 53.9726C86.9596 52.857 87.0693 51.7671 87.0455 50.7029C87.0217 49.6387 86.8319 48.6661 86.4761 47.7852C86.1278 46.8694 85.5847 46.0938 84.8467 45.4583C84.1512 44.7955 83.2282 44.3388 82.0777 44.0881C80.9272 43.8375 79.8805 43.865 78.9374 44.1708C78.0368 44.4493 77.2377 44.9326 76.5401 45.6205C75.85 46.2735 75.2728 47.079 74.8085 48.0369C74.3442 48.9947 73.9905 50.0315 73.7474 51.1471C73.5044 52.2627 73.3947 53.3526 73.4185 54.4168C73.4423 55.481 73.6283 56.471 73.9765 57.3868C74.3324 58.2677 74.8581 59.0396 75.5536 59.7024C76.2916 60.3379 77.2358 60.781 78.3863 61.0316Z" fill="white"/>
+            <path d="M47.7441 24.1504C47.4373 23.0734 46.8725 22.0605 46.0495 21.1117C45.2709 20.1124 44.3115 19.2676 43.1713 18.5773C42.028 17.8395 40.7528 17.277 39.3458 16.8896C37.9862 16.4993 36.5705 16.3509 35.0986 16.4443C32.4873 16.6102 30.1465 17.2833 28.0763 18.4635C26.0031 19.5963 24.2626 21.0893 22.8548 22.9425C21.4471 24.7957 20.3913 26.9365 19.6875 29.3647C19.0311 31.7899 18.7889 34.3557 18.9608 37.062C19.1357 39.8157 19.7021 42.354 20.66 44.6767C21.6654 46.9963 22.9836 48.9863 24.6145 50.6465C26.2454 52.3067 28.1623 53.5913 30.3652 54.5001C32.5651 55.3614 34.9707 55.7092 37.5821 55.5433C39.6237 55.4137 41.5997 55.0021 43.5101 54.3087C45.4176 53.5679 47.0725 52.6047 48.475 51.4192C49.925 50.2306 51.0528 48.8481 51.8584 47.2714C52.7084 45.6443 53.0716 43.8574 52.948 41.9108L37.8497 42.8698L37.0988 31.0475L68.4349 29.0572L69.0275 38.3868C69.317 42.9448 68.7232 47.106 67.2462 50.8705C65.7662 54.5874 63.6342 57.7976 60.8503 60.5009C58.117 63.2488 54.8236 65.4363 50.9703 67.0635C47.117 68.6907 42.9588 69.646 38.4958 69.9295C33.4156 70.2521 28.7306 69.6678 24.4408 68.1765C20.1541 66.7326 16.3949 64.5878 13.1633 61.7422C9.97907 58.8935 7.42492 55.4566 5.50079 51.4315C3.57364 47.3589 2.45778 42.9249 2.15319 38.1295C1.84861 33.3341 2.39602 28.8183 3.79542 24.5821C5.19482 20.3459 7.29361 16.6135 10.0918 13.3848C12.9374 10.1531 16.3951 7.55 20.4647 5.57538C24.5312 3.55327 29.1046 2.38088 34.1849 2.0582C38.4105 1.78981 42.3875 2.10926 46.1157 3.01655C49.8885 3.87334 53.2403 5.23358 56.1712 7.09725C59.1496 8.9579 61.6299 11.2316 63.612 13.9182C65.6417 16.6019 67.0469 19.5874 67.8277 22.8747L47.7441 24.1504Z" fill="white"/>
+            <path d="M87.0103 16.0894L88.229 1.43945L138.082 5.58654L123.435 69.7467L105.656 68.2678L117.661 18.6392L87.0103 16.0894Z" fill="white"/>
+          </svg>
+        </div>
+      </div>
+      
+      <div class="welcome_text">Welcome to Go7</div>
+      <div class="subtitle">Your Smart Travel Companion</div>
+      <div class="click_indicator">Click the logo to start exploring</div>
+    </div>
   </body>
-</html> 
+</html>

@@ -1,0 +1,19 @@
+.footer {
+  width: 100%;
+
+  .footer_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color_light_gray);
+    padding: 20px 0;
+
+    .footer_text {
+      font-family: pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      font-size: var(--font_base);
+      font-weight: lighter;
+      text-align: center;
+    }
+  }
+}

@@ -1,3 +1,36 @@
 :root {
-  
+  /* color */
+  --color_black: #2e2e2e;
+  --color_gray: #757575;
+  --color_light_gray: #f9f9f9;
+  --color_blue: #4e78ff;
+  --color_light_blue: #8aa6ff;
+
+  /* font-size */
+  /* 수치 저장 */
+  --font_size_12: 12px;
+  --font_size_14: 14px;
+  --font_size_16: 16px;
+  --font_size_19: 19px;
+
+  /* 실제 사용 */
+  --font_base: var(--font_size_12);
+  --font_lg: var(--font_size_14);
+  --font_xl: var(--font_size_16);
+  --font_2xl: var(--font_size_19);
+
+  /* border-radius */
+  --rounded_none: 0;
+  --rounded_sm: 8px;
+  --rounded_md: 16px;
+  --rounded_lg: 24px;
+  --rounded_full: 9999px;
+  --rounded_circle: 50%;
+
+  /* box-shadow */
+  --shadow_base: 0px 4px 6px 0 rgba(0, 0, 0, 0.1);
+
+  /* layout */
+  --web_max_witdh: 420px;
+  --web_page_spacing: 24px;
 }

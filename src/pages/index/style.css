@@ -1,0 +1,32 @@
+@import url(/src/components/header/style.css);
+@import url(/src/components/search-bar/search-bar.css);
+@import url(/src/components/index-carousel/style.css);
+@import url(/src/components/footer/style.css);
+
+/* 메인 페이지 레이아웃 */
+
+.sub_body {
+  .page_container {
+    padding: 75px 0 0;
+
+    .search_container {
+      width: calc(100% - (var(--web_page_spacing) * 2));
+      left: 50%;
+      translate: -50% 0;
+    }
+  }
+
+  .footer {
+    margin-top: 20px;
+  }
+}
+
+/* 캐러셀 섹션들 중앙 정렬 */
+.section_title,
+.destinations {
+  width: 100%;
+}
+
+.section_header {
+  padding: 0 24px;
+}

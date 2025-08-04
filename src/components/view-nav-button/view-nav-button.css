@@ -1,0 +1,35 @@
+.view_nav_btn {
+  background-color: var(--color_light_gray);
+  display: flex;
+  flex-flow: row wrap;
+  border-radius: var(--rounded_full);
+  box-shadow: var(--shadow_base);
+
+  li {
+    position: relative;
+
+    a {
+      display: block;
+      padding: 0 30px;
+      block-size: 40px;
+      align-content: center;
+      color: var(--color_black);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 50% 0 auto auto;
+      translate: 0 -50%;
+      inline-size: 1px;
+      block-size: 15px;
+      background-color: var(--color_gray);
+    }
+
+    &:last-child {
+      &::after {
+        display: none;
+      }
+    }
+  }
+}

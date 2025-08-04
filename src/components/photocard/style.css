@@ -1,0 +1,20 @@
+:root {
+  --photo_sm_size: 50px;
+  --photo_md_size: 88px;
+  --photo_lg_size: 100px;
+}
+
+.photo_container {
+  --photo_size: var(--photo_lg_size);
+  width: var(--photo_size);
+  height: var(--photo_size);
+  overflow: hidden;
+  border-radius: var(--rounded_md);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
